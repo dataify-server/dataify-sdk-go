@@ -1,0 +1,3226 @@
+tools:
+  - name: "airbnb_product"
+    group: "Airbnb"
+    method: "Product"
+    request_type: "AirbnbProductRequest"
+    service_kind: "scraper_builder"
+    spider_name: "airbnb.com"
+    spider_id: "airbnb_product_by-searchurl"
+    params:
+      - name: "searchurl"
+        go_name: "Searchurl"
+        type: "string"
+        required: true
+        default: "https://www.airbnb.com/s/Greece/homes?query=Greece&refinement_paths%5B%5D=%2Fhomes&place_id=ChIJY2xxEcdKWxMRHS2a3HUXOjY&flexible_trip_lengths%5B%5D=one_week&monthly_start_date=2025-03-01&monthly_length=3&monthly_end_date=2025-06-01&search_mode=regular_search&price_filter_input_type=0&channel=EXPLORE&date_picker_type=calendar&source=structured_search_input_header&search_type=filter_change&price_filter_num_nights=5&flexible_date_search_filter_type=1"
+      - name: "country"
+        go_name: "Country"
+        type: "string"
+        required: false
+        default: "HK"
+      - name: "file_name"
+        go_name: "FileName"
+        type: "string"
+        required: false
+        default: "{{TasksID}}"
+  - name: "amazon_comment"
+    group: "Amazon"
+    method: "Comment"
+    request_type: "AmazonCommentRequest"
+    service_kind: "scraper_builder"
+    spider_name: "amazon.com"
+    spider_id: "amazon_comment_by-url"
+    params:
+      - name: "url"
+        go_name: "URL"
+        type: "string"
+        required: true
+        default: "https://www.amazon.com/HISDERN-Checkered-Handkerchief-Classic-Necktie/dp/B0BRXPR726"
+      - name: "file_name"
+        go_name: "FileName"
+        type: "string"
+        required: false
+        default: "{{TasksID}}"
+  - name: "amazon_global_product"
+    group: "Amazon"
+    method: "GlobalProduct"
+    request_type: "AmazonGlobalProductRequest"
+    service_kind: "scraper_builder"
+    spider_name: "amazon.com"
+    spider_id: "amazon_global-product_by-url"
+    params:
+      - name: "spider_id"
+        go_name: "SpiderID"
+        type: "string"
+        required: true
+        default: "amazon_global-product_by-url"
+      - name: "url"
+        go_name: "URL"
+        type: "string"
+        required: false
+      - name: "maximum"
+        go_name: "Maximum"
+        type: "string"
+        required: false
+        default: "5"
+      - name: "sort_by"
+        go_name: "SortBy"
+        type: "string"
+        required: false
+        default: "畅销排行"
+      - name: "get_sponsored"
+        go_name: "GetSponsored"
+        type: "string"
+        required: false
+        default: "true"
+      - name: "keyword"
+        go_name: "Keyword"
+        type: "string"
+        required: false
+      - name: "domain"
+        go_name: "Domain"
+        type: "string"
+        required: false
+        default: "https://www.amazon.com"
+      - name: "brands"
+        go_name: "Brands"
+        type: "string"
+        required: false
+        default: "Adidas"
+      - name: "page_turning"
+        go_name: "PageTurning"
+        type: "string"
+        required: false
+        default: "2"
+      - name: "lowest_price"
+        go_name: "LowestPrice"
+        type: "string"
+        required: false
+        default: "20"
+      - name: "highest_price"
+        go_name: "HighestPrice"
+        type: "string"
+        required: false
+        default: "50"
+      - name: "file_name"
+        go_name: "FileName"
+        type: "string"
+        required: false
+        default: "{{TasksID}}"
+  - name: "amazon_product"
+    group: "Amazon"
+    method: "Product"
+    request_type: "AmazonProductRequest"
+    service_kind: "scraper_builder"
+    spider_name: "amazon.com"
+    spider_id: "amazon_product_by-asin"
+    params:
+      - name: "spider_id"
+        go_name: "SpiderID"
+        type: "string"
+        required: true
+        default: "amazon_product_by-asin"
+      - name: "asin"
+        go_name: "Asin"
+        type: "string"
+        required: false
+        default: "B0BZYCJK89"
+      - name: "url"
+        go_name: "URL"
+        type: "string"
+        required: false
+      - name: "category_url"
+        go_name: "CategoryURL"
+        type: "string"
+        required: false
+      - name: "keyword"
+        go_name: "Keyword"
+        type: "string"
+        required: false
+        default: "coffee"
+      - name: "page_turning"
+        go_name: "PageTurning"
+        type: "string"
+        required: false
+      - name: "lowest_price"
+        go_name: "LowestPrice"
+        type: "string"
+        required: false
+        default: "20"
+      - name: "highest_price"
+        go_name: "HighestPrice"
+        type: "string"
+        required: false
+        default: "50"
+      - name: "sort_by"
+        go_name: "SortBy"
+        type: "string"
+        required: false
+        default: "畅销排行"
+      - name: "collect_subcategories"
+        go_name: "CollectSubcategories"
+        type: "string"
+        required: false
+      - name: "zip_code"
+        go_name: "ZipCode"
+        type: "string"
+        required: false
+        default: "94107"
+      - name: "file_name"
+        go_name: "FileName"
+        type: "string"
+        required: false
+        default: "{{TasksID}}"
+  - name: "amazon_product_list"
+    group: "Amazon"
+    method: "ProductList"
+    request_type: "AmazonProductListRequest"
+    service_kind: "scraper_builder"
+    spider_name: "amazon.com"
+    spider_id: "amazon_product-list_by-keywords-domain"
+    params:
+      - name: "keyword"
+        go_name: "Keyword"
+        type: "string"
+        required: true
+        default: "X-box"
+      - name: "domain"
+        go_name: "Domain"
+        type: "string"
+        required: true
+        default: "https://www.amazon.com/"
+      - name: "page_turning"
+        go_name: "PageTurning"
+        type: "string"
+        required: false
+        default: "1"
+      - name: "file_name"
+        go_name: "FileName"
+        type: "string"
+        required: false
+        default: "{{TasksID}}"
+  - name: "amazon_seller"
+    group: "Amazon"
+    method: "Seller"
+    request_type: "AmazonSellerRequest"
+    service_kind: "scraper_builder"
+    spider_name: "amazon.com"
+    spider_id: "amazon_seller_by-url"
+    params:
+      - name: "url"
+        go_name: "URL"
+        type: "string"
+        required: true
+        default: "https://www.amazon.com/sp?ie=UTF8&seller=ADZ7LD48GVFQJ&asin=B07H56J7K1&ref_=dp_merchant_link&isAmazonFulfilled=1"
+      - name: "file_name"
+        go_name: "FileName"
+        type: "string"
+        required: false
+        default: "{{TasksID}}"
+  - name: "bing_images"
+    group: "Bing"
+    method: "Images"
+    request_type: "BingImagesRequest"
+    service_kind: "serp"
+    engine: "bing_images"
+    params:
+      - name: "q"
+        go_name: "Q"
+        type: "string"
+        required: true
+        default: "Pizza"
+      - name: "json"
+        go_name: "JSON"
+        type: "string"
+        required: true
+        default: "1"
+      - name: "mkt"
+        go_name: "Mkt"
+        type: "string"
+        required: false
+      - name: "cc"
+        go_name: "Cc"
+        type: "string"
+        required: false
+      - name: "first"
+        go_name: "First"
+        type: "string"
+        required: false
+        default: "0"
+      - name: "count"
+        go_name: "Count"
+        type: "string"
+        required: false
+      - name: "imagesize"
+        go_name: "Imagesize"
+        type: "string"
+        required: false
+      - name: "color2"
+        go_name: "Color2"
+        type: "string"
+        required: false
+      - name: "photo"
+        go_name: "Photo"
+        type: "string"
+        required: false
+      - name: "aspect"
+        go_name: "Aspect"
+        type: "string"
+        required: false
+      - name: "face"
+        go_name: "Face"
+        type: "string"
+        required: false
+      - name: "age"
+        go_name: "Age"
+        type: "string"
+        required: false
+      - name: "license"
+        go_name: "License"
+        type: "string"
+        required: false
+      - name: "no_cache"
+        go_name: "NoCache"
+        type: "string"
+        required: false
+        default: "false"
+  - name: "bing_maps"
+    group: "Bing"
+    method: "Maps"
+    request_type: "BingMapsRequest"
+    service_kind: "serp"
+    engine: "bing_maps"
+    params:
+      - name: "q"
+        go_name: "Q"
+        type: "string"
+        required: true
+      - name: "json"
+        go_name: "JSON"
+        type: "string"
+        required: true
+        default: "1"
+      - name: "cp"
+        go_name: "Cp"
+        type: "string"
+        required: false
+      - name: "setlang"
+        go_name: "Setlang"
+        type: "string"
+        required: false
+      - name: "place_id"
+        go_name: "PlaceID"
+        type: "string"
+        required: false
+      - name: "first"
+        go_name: "First"
+        type: "string"
+        required: false
+        default: "0"
+      - name: "count"
+        go_name: "Count"
+        type: "string"
+        required: false
+      - name: "no_cache"
+        go_name: "NoCache"
+        type: "string"
+        required: false
+        default: "false"
+  - name: "bing_news"
+    group: "Bing"
+    method: "News"
+    request_type: "BingNewsRequest"
+    service_kind: "serp"
+    engine: "bing_news"
+    params:
+      - name: "q"
+        go_name: "Q"
+        type: "string"
+        required: true
+        default: "Pizza"
+      - name: "json"
+        go_name: "JSON"
+        type: "string"
+        required: true
+        default: "1"
+      - name: "mkt"
+        go_name: "Mkt"
+        type: "string"
+        required: false
+      - name: "cc"
+        go_name: "Cc"
+        type: "string"
+        required: false
+      - name: "first"
+        go_name: "First"
+        type: "string"
+        required: false
+        default: "0"
+      - name: "count"
+        go_name: "Count"
+        type: "string"
+        required: false
+      - name: "qft"
+        go_name: "Qft"
+        type: "string"
+        required: false
+      - name: "safeSearch"
+        go_name: "Safesearch"
+        type: "string"
+        required: false
+      - name: "no_cache"
+        go_name: "NoCache"
+        type: "string"
+        required: false
+        default: "false"
+  - name: "bing_search"
+    group: "Bing"
+    method: "Search"
+    request_type: "BingSearchRequest"
+    service_kind: "serp"
+    engine: "bing"
+    params:
+      - name: "q"
+        go_name: "Q"
+        type: "string"
+        required: true
+        default: "Pizza"
+      - name: "json"
+        go_name: "JSON"
+        type: "string"
+        required: true
+        default: "1"
+      - name: "location"
+        go_name: "Location"
+        type: "string"
+        required: false
+      - name: "lat"
+        go_name: "Lat"
+        type: "string"
+        required: false
+      - name: "lon"
+        go_name: "Lon"
+        type: "string"
+        required: false
+      - name: "mkt"
+        go_name: "Mkt"
+        type: "string"
+        required: false
+      - name: "cc"
+        go_name: "Cc"
+        type: "string"
+        required: false
+      - name: "first"
+        go_name: "First"
+        type: "string"
+        required: false
+        default: "0"
+      - name: "safeSearch"
+        go_name: "Safesearch"
+        type: "string"
+        required: false
+      - name: "filters"
+        go_name: "Filters"
+        type: "string"
+        required: false
+      - name: "no_cache"
+        go_name: "NoCache"
+        type: "string"
+        required: false
+        default: "false"
+  - name: "bing_shopping"
+    group: "Bing"
+    method: "Shopping"
+    request_type: "BingShoppingRequest"
+    service_kind: "serp"
+    engine: "bing_shopping"
+    params:
+      - name: "q"
+        go_name: "Q"
+        type: "string"
+        required: true
+        default: "Pizza"
+      - name: "json"
+        go_name: "JSON"
+        type: "string"
+        required: true
+        default: "1"
+      - name: "mkt"
+        go_name: "Mkt"
+        type: "string"
+        required: false
+      - name: "cc"
+        go_name: "Cc"
+        type: "string"
+        required: false
+      - name: "efirst"
+        go_name: "Efirst"
+        type: "string"
+        required: false
+      - name: "filters"
+        go_name: "Filters"
+        type: "string"
+        required: false
+      - name: "no_cache"
+        go_name: "NoCache"
+        type: "string"
+        required: false
+        default: "false"
+  - name: "bing_videos"
+    group: "Bing"
+    method: "Videos"
+    request_type: "BingVideosRequest"
+    service_kind: "serp"
+    engine: "bing_videos"
+    params:
+      - name: "q"
+        go_name: "Q"
+        type: "string"
+        required: true
+        default: "Pizza"
+      - name: "json"
+        go_name: "JSON"
+        type: "string"
+        required: true
+        default: "1"
+      - name: "mkt"
+        go_name: "Mkt"
+        type: "string"
+        required: false
+      - name: "cc"
+        go_name: "Cc"
+        type: "string"
+        required: false
+      - name: "setlang"
+        go_name: "Setlang"
+        type: "string"
+        required: false
+      - name: "first"
+        go_name: "First"
+        type: "string"
+        required: false
+        default: "0"
+      - name: "length"
+        go_name: "Length"
+        type: "string"
+        required: false
+      - name: "date"
+        go_name: "Date"
+        type: "string"
+        required: false
+      - name: "resolution"
+        go_name: "Resolution"
+        type: "string"
+        required: false
+      - name: "source_site"
+        go_name: "SourceSite"
+        type: "string"
+        required: false
+      - name: "price"
+        go_name: "Price"
+        type: "string"
+        required: false
+      - name: "no_cache"
+        go_name: "NoCache"
+        type: "string"
+        required: false
+        default: "false"
+  - name: "booking_hotellist"
+    group: "Booking"
+    method: "Hotellist"
+    request_type: "BookingHotellistRequest"
+    service_kind: "scraper_builder"
+    spider_name: "booking.com"
+    spider_id: "booking_hotellist_by-url"
+    params:
+      - name: "url"
+        go_name: "URL"
+        type: "string"
+        required: true
+        default: "https://www.booking.com/hotel/gb/westlands-of-pitlochry.en-gb.html#tab-main"
+      - name: "file_name"
+        go_name: "FileName"
+        type: "string"
+        required: false
+        default: "{{TasksID}}"
+  - name: "crunchbase_company"
+    group: "Crunchbase"
+    method: "Company"
+    request_type: "CrunchbaseCompanyRequest"
+    service_kind: "scraper_builder"
+    spider_name: "crunchbase.com"
+    spider_id: "crunchbase_company_by-url"
+    params:
+      - name: "spider_id"
+        go_name: "SpiderID"
+        type: "string"
+        required: true
+        default: "crunchbase_company_by-url"
+      - name: "url"
+        go_name: "URL"
+        type: "string"
+        required: false
+        default: "https://www.crunchbase.com/organization/aisci"
+      - name: "keyword"
+        go_name: "Keyword"
+        type: "string"
+        required: false
+        default: "NetBooster"
+      - name: "file_name"
+        go_name: "FileName"
+        type: "string"
+        required: false
+        default: "{{TasksID}}"
+  - name: "duckduckgo_search"
+    group: "DuckDuckGo"
+    method: "Search"
+    request_type: "DuckDuckGoSearchRequest"
+    service_kind: "serp"
+    engine: "duckduckgo"
+    params:
+      - name: "q"
+        go_name: "Q"
+        type: "string"
+        required: true
+        default: "Pizza"
+      - name: "json"
+        go_name: "JSON"
+        type: "string"
+        required: true
+        default: "1"
+      - name: "kl"
+        go_name: "Kl"
+        type: "string"
+        required: false
+      - name: "search_assist"
+        go_name: "SearchAssist"
+        type: "string"
+        required: false
+        default: "false"
+      - name: "safe"
+        go_name: "Safe"
+        type: "string"
+        required: false
+        default: "-1"
+      - name: "df"
+        go_name: "Df"
+        type: "string"
+        required: false
+      - name: "start"
+        go_name: "Start"
+        type: "string"
+        required: false
+        default: "0"
+      - name: "m"
+        go_name: "M"
+        type: "string"
+        required: false
+        default: "10"
+      - name: "no_cache"
+        go_name: "NoCache"
+        type: "string"
+        required: false
+        default: "false"
+  - name: "ebay_info"
+    group: "EBay"
+    method: "Info"
+    request_type: "EBayInfoRequest"
+    service_kind: "scraper_builder"
+    spider_name: "ebay.com"
+    spider_id: "ebay_ebay_by-url"
+    params:
+      - name: "spider_id"
+        go_name: "SpiderID"
+        type: "string"
+        required: true
+        default: "ebay_ebay_by-url"
+      - name: "url"
+        go_name: "URL"
+        type: "string"
+        required: false
+        default: "https://www.ebay.com/itm/296197468977?itmmeta=01HRWJ04NFHYT9AX0XZB8F18G1&hash=item44f6beb331%3Ag%3ADEQAAOSw3CxlhTJ%7E&_trkparms=%2526rpp_cid%253D6523c97b0b7882040b9472b6"
+      - name: "keywords"
+        go_name: "Keywords"
+        type: "string"
+        required: false
+        default: "baby toys"
+      - name: "count"
+        go_name: "Count"
+        type: "string"
+        required: false
+        default: "60"
+      - name: "file_name"
+        go_name: "FileName"
+        type: "string"
+        required: false
+        default: "{{TasksID}}"
+  - name: "facebook_comment"
+    group: "Facebook"
+    method: "Comment"
+    request_type: "FacebookCommentRequest"
+    service_kind: "scraper_builder"
+    spider_name: "facebook.com"
+    spider_id: "facebook_comment_by-comments-url"
+    params:
+      - name: "url"
+        go_name: "URL"
+        type: "string"
+        required: true
+        default: "https://www.facebook.com/share/p/1K6xfHFkrK/"
+      - name: "get_all_replies"
+        go_name: "GetAllReplies"
+        type: "string"
+        required: false
+        default: "True"
+      - name: "limit_records"
+        go_name: "LimitRecords"
+        type: "string"
+        required: false
+        default: "10"
+      - name: "comments_sort"
+        go_name: "CommentsSort"
+        type: "string"
+        required: false
+        default: "所有评论"
+      - name: "file_name"
+        go_name: "FileName"
+        type: "string"
+        required: false
+        default: "{{TasksID}}"
+  - name: "facebook_event"
+    group: "Facebook"
+    method: "Event"
+    request_type: "FacebookEventRequest"
+    service_kind: "scraper_builder"
+    spider_name: "facebook.com"
+    spider_id: "facebook_event_by-eventlist-url"
+    params:
+      - name: "spider_id"
+        go_name: "SpiderID"
+        type: "string"
+        required: true
+        default: "facebook_event_by-eventlist-url"
+      - name: "url"
+        go_name: "URL"
+        type: "string"
+        required: true
+        default: "https://www.facebook.com/nohoclub/events"
+      - name: "file_name"
+        go_name: "FileName"
+        type: "string"
+        required: false
+        default: "{{TasksID}}"
+  - name: "facebook_post"
+    group: "Facebook"
+    method: "Post"
+    request_type: "FacebookPostRequest"
+    service_kind: "scraper_builder"
+    spider_name: "facebook.com"
+    spider_id: "facebook_post_by-posts-url"
+    params:
+      - name: "url"
+        go_name: "URL"
+        type: "string"
+        required: true
+        default: "https://www.facebook.com/permalink.php?story_fbid=pfbid0gNjZBhqCxSqj9xJS5aygNwqFqNEM2fYbTFKKbsvvGdEfTgFyAYWSckvkEHPqAE7gl&id=61574926580533&rdid=86oaujwNGCCdPLfj#"
+      - name: "file_name"
+        go_name: "FileName"
+        type: "string"
+        required: false
+        default: "{{TasksID}}"
+  - name: "facebook_profile"
+    group: "Facebook"
+    method: "Profile"
+    request_type: "FacebookProfileRequest"
+    service_kind: "scraper_builder"
+    spider_name: "facebook.com"
+    spider_id: "facebook_profile_by-profiles-url"
+    params:
+      - name: "url"
+        go_name: "URL"
+        type: "string"
+        required: true
+        default: "https://www.facebook.com/MayeMusk"
+      - name: "file_name"
+        go_name: "FileName"
+        type: "string"
+        required: false
+        default: "{{TasksID}}"
+  - name: "github_repository"
+    group: "GitHub"
+    method: "Repository"
+    request_type: "GitHubRepositoryRequest"
+    service_kind: "scraper_builder"
+    spider_name: "github.com"
+    spider_id: "github_repository_by-repo-url"
+    params:
+      - name: "spider_id"
+        go_name: "SpiderID"
+        type: "string"
+        required: true
+        default: "github_repository_by-repo-url"
+      - name: "repo_url"
+        go_name: "RepoURL"
+        type: "string"
+        required: false
+        default: "https://github.com/TheAlgorithms/Python"
+      - name: "search_url"
+        go_name: "SearchURL"
+        type: "string"
+        required: false
+        default: "https://github.com/search?q=ML&type=repositories"
+      - name: "url"
+        go_name: "URL"
+        type: "string"
+        required: false
+        default: "https://github.com/TheAlgorithms/Python/blob/master/divide_and_conquer/power.py"
+      - name: "page_turning"
+        go_name: "PageTurning"
+        type: "string"
+        required: false
+        default: "1"
+      - name: "max_num"
+        go_name: "MaxNum"
+        type: "string"
+        required: false
+        default: "15"
+      - name: "file_name"
+        go_name: "FileName"
+        type: "string"
+        required: false
+        default: "{{TasksID}}"
+  - name: "glassdoor_company"
+    group: "Glassdoor"
+    method: "Company"
+    request_type: "GlassdoorCompanyRequest"
+    service_kind: "scraper_builder"
+    spider_name: "glassdoor.com"
+    spider_id: "glassdoor_company_by-url"
+    params:
+      - name: "spider_id"
+        go_name: "SpiderID"
+        type: "string"
+        required: true
+        default: "glassdoor_company_by-url"
+      - name: "url"
+        go_name: "URL"
+        type: "string"
+        required: false
+        default: "https://www.glassdoor.co.uk/Overview/Working-at-Apple-EI_IE1138.11,16.htm"
+      - name: "location"
+        go_name: "Location"
+        type: "string"
+        required: false
+        default: "United States"
+      - name: "company_name"
+        go_name: "CompanyName"
+        type: "string"
+        required: false
+        default: "Tesla"
+      - name: "industries"
+        go_name: "Industries"
+        type: "string"
+        required: false
+        default: "Information Technology"
+      - name: "Job title"
+        go_name: "JobTitle"
+        type: "string"
+        required: false
+        default: "Data"
+      - name: "search_url"
+        go_name: "SearchURL"
+        type: "string"
+        required: false
+        default: "https://www.glassdoor.com/Search/results.htm?keyword=Apple"
+      - name: "max_search_results"
+        go_name: "MaxSearchResults"
+        type: "string"
+        required: false
+        default: "5"
+      - name: "file_name"
+        go_name: "FileName"
+        type: "string"
+        required: false
+        default: "{{TasksID}}"
+  - name: "glassdoor_joblistings"
+    group: "Glassdoor"
+    method: "Joblistings"
+    request_type: "GlassdoorJoblistingsRequest"
+    service_kind: "scraper_builder"
+    spider_name: "glassdoor.com"
+    spider_id: "glassdoor_joblistings_by-url"
+    params:
+      - name: "spider_id"
+        go_name: "SpiderID"
+        type: "string"
+        required: true
+        default: "glassdoor_joblistings_by-url"
+      - name: "url"
+        go_name: "URL"
+        type: "string"
+        required: false
+        default: "https://www.glassdoor.com/Job/new-york-data-analyst-jobs-SRCH_IL.0,8_IC1132348_KO9,21.htm"
+      - name: "keyword"
+        go_name: "Keyword"
+        type: "string"
+        required: false
+        default: "data analyst"
+      - name: "location"
+        go_name: "Location"
+        type: "string"
+        required: false
+        default: "New York"
+      - name: "country"
+        go_name: "Country"
+        type: "string"
+        required: false
+        default: "US"
+      - name: "file_name"
+        go_name: "FileName"
+        type: "string"
+        required: false
+        default: "{{TasksID}}"
+  - name: "google_ai_mode"
+    group: "Google"
+    method: "AIMode"
+    request_type: "GoogleAIModeRequest"
+    service_kind: "serp"
+    engine: "google_ai_mode"
+    params:
+      - name: "q"
+        go_name: "Q"
+        type: "string"
+        required: true
+        default: "pizza"
+      - name: "json"
+        go_name: "JSON"
+        type: "string"
+        required: true
+        default: "1"
+      - name: "location"
+        go_name: "Location"
+        type: "string"
+        required: false
+      - name: "uule"
+        go_name: "Uule"
+        type: "string"
+        required: false
+      - name: "no_cache"
+        go_name: "NoCache"
+        type: "string"
+        required: false
+        default: "false"
+      - name: "gl"
+        go_name: "Gl"
+        type: "string"
+        required: false
+      - name: "hl"
+        go_name: "Hl"
+        type: "string"
+        required: false
+  - name: "google_finance"
+    group: "Google"
+    method: "Finance"
+    request_type: "GoogleFinanceRequest"
+    service_kind: "serp"
+    engine: "google_finance"
+    params:
+      - name: "q"
+        go_name: "Q"
+        type: "string"
+        required: true
+      - name: "json"
+        go_name: "JSON"
+        type: "string"
+        required: true
+        default: "1"
+      - name: "hl"
+        go_name: "Hl"
+        type: "string"
+        required: false
+      - name: "window"
+        go_name: "Window"
+        type: "string"
+        required: false
+        default: "1D"
+      - name: "no_cache"
+        go_name: "NoCache"
+        type: "string"
+        required: false
+        default: "false"
+  - name: "google_flights"
+    group: "Google"
+    method: "Flights"
+    request_type: "GoogleFlightsRequest"
+    service_kind: "serp"
+    engine: "google_flights"
+    params:
+      - name: "departure_id"
+        go_name: "DepartureID"
+        type: "string"
+        required: false
+      - name: "arrival_id"
+        go_name: "ArrivalID"
+        type: "string"
+        required: false
+      - name: "json"
+        go_name: "JSON"
+        type: "string"
+        required: true
+        default: "1"
+      - name: "gl"
+        go_name: "Gl"
+        type: "string"
+        required: false
+      - name: "hl"
+        go_name: "Hl"
+        type: "string"
+        required: false
+      - name: "currency"
+        go_name: "Currency"
+        type: "string"
+        required: false
+        default: "USD"
+      - name: "type"
+        go_name: "Type"
+        type: "string"
+        required: false
+        default: "1"
+      - name: "outbound_date"
+        go_name: "OutboundDate"
+        type: "string"
+        required: false
+      - name: "return_date"
+        go_name: "ReturnDate"
+        type: "string"
+        required: false
+      - name: "travel_class"
+        go_name: "TravelClass"
+        type: "string"
+        required: false
+        default: "1"
+      - name: "multi_city_json"
+        go_name: "MultiCityJSON"
+        type: "string"
+        required: false
+      - name: "show_hidden"
+        go_name: "ShowHidden"
+        type: "string"
+        required: false
+        default: "false"
+      - name: "exclude_basic"
+        go_name: "ExcludeBasic"
+        type: "string"
+        required: false
+        default: "false"
+      - name: "deep_search"
+        go_name: "DeepSearch"
+        type: "string"
+        required: false
+        default: "false"
+      - name: "adults"
+        go_name: "Adults"
+        type: "string"
+        required: false
+        default: "1"
+      - name: "children"
+        go_name: "Children"
+        type: "string"
+        required: false
+        default: "0"
+      - name: "infants_in_seat"
+        go_name: "InfantsInSeat"
+        type: "string"
+        required: false
+        default: "0"
+      - name: "infants_on_lap"
+        go_name: "InfantsOnLap"
+        type: "string"
+        required: false
+        default: "0"
+      - name: "sort_by"
+        go_name: "SortBy"
+        type: "string"
+        required: false
+        default: "1"
+      - name: "stops"
+        go_name: "Stops"
+        type: "string"
+        required: false
+        default: "0"
+      - name: "exclude_airlines"
+        go_name: "ExcludeAirlines"
+        type: "string"
+        required: false
+      - name: "include_airlines"
+        go_name: "IncludeAirlines"
+        type: "string"
+        required: false
+      - name: "bags"
+        go_name: "Bags"
+        type: "string"
+        required: false
+        default: "0"
+      - name: "max_price"
+        go_name: "MaxPrice"
+        type: "string"
+        required: false
+      - name: "outbound_times"
+        go_name: "OutboundTimes"
+        type: "string"
+        required: false
+      - name: "return_times"
+        go_name: "ReturnTimes"
+        type: "string"
+        required: false
+      - name: "emissions"
+        go_name: "Emissions"
+        type: "string"
+        required: false
+      - name: "layover_duration"
+        go_name: "LayoverDuration"
+        type: "string"
+        required: false
+      - name: "exclude_conns"
+        go_name: "ExcludeConns"
+        type: "string"
+        required: false
+      - name: "max_duration"
+        go_name: "MaxDuration"
+        type: "string"
+        required: false
+      - name: "departure_token"
+        go_name: "DepartureToken"
+        type: "string"
+        required: false
+      - name: "no_cache"
+        go_name: "NoCache"
+        type: "string"
+        required: false
+        default: "false"
+  - name: "google_hotels"
+    group: "Google"
+    method: "Hotels"
+    request_type: "GoogleHotelsRequest"
+    service_kind: "serp"
+    engine: "google_hotels"
+    params:
+      - name: "q"
+        go_name: "Q"
+        type: "string"
+        required: true
+        default: "pizza"
+      - name: "json"
+        go_name: "JSON"
+        type: "string"
+        required: true
+        default: "1"
+      - name: "hl"
+        go_name: "Hl"
+        type: "string"
+        required: false
+      - name: "gl"
+        go_name: "Gl"
+        type: "string"
+        required: false
+      - name: "currency"
+        go_name: "Currency"
+        type: "string"
+        required: false
+        default: "USD"
+      - name: "check_in_date"
+        go_name: "CheckInDate"
+        type: "string"
+        required: true
+      - name: "check_out_date"
+        go_name: "CheckOutDate"
+        type: "string"
+        required: true
+      - name: "adults"
+        go_name: "Adults"
+        type: "string"
+        required: false
+        default: "2"
+      - name: "children"
+        go_name: "Children"
+        type: "string"
+        required: false
+        default: "0"
+      - name: "children_ages"
+        go_name: "ChildrenAges"
+        type: "string"
+        required: false
+      - name: "sort_by"
+        go_name: "SortBy"
+        type: "string"
+        required: false
+      - name: "min_price"
+        go_name: "MinPrice"
+        type: "string"
+        required: false
+      - name: "max_price"
+        go_name: "MaxPrice"
+        type: "string"
+        required: false
+      - name: "property_types"
+        go_name: "PropertyTypes"
+        type: "string"
+        required: false
+      - name: "amenities"
+        go_name: "Amenities"
+        type: "string"
+        required: false
+      - name: "rating"
+        go_name: "Rating"
+        type: "string"
+        required: false
+      - name: "brands"
+        go_name: "Brands"
+        type: "string"
+        required: false
+      - name: "hotel_class"
+        go_name: "HotelClass"
+        type: "string"
+        required: false
+      - name: "free_cancellation"
+        go_name: "FreeCancellation"
+        type: "string"
+        required: false
+      - name: "special_offers"
+        go_name: "SpecialOffers"
+        type: "string"
+        required: false
+      - name: "eco_certified"
+        go_name: "EcoCertified"
+        type: "string"
+        required: false
+      - name: "vacation_rentals"
+        go_name: "VacationRentals"
+        type: "string"
+        required: false
+      - name: "bedrooms"
+        go_name: "Bedrooms"
+        type: "string"
+        required: false
+        default: "0"
+      - name: "bathrooms"
+        go_name: "Bathrooms"
+        type: "string"
+        required: false
+        default: "0"
+      - name: "next_page_token"
+        go_name: "NextPageToken"
+        type: "string"
+        required: false
+      - name: "no_cache"
+        go_name: "NoCache"
+        type: "string"
+        required: false
+        default: "false"
+      - name: "property_token"
+        go_name: "PropertyToken"
+        type: "string"
+        required: false
+  - name: "google_images"
+    group: "Google"
+    method: "Images"
+    request_type: "GoogleImagesRequest"
+    service_kind: "serp"
+    engine: "google_images"
+    params:
+      - name: "q"
+        go_name: "Q"
+        type: "string"
+        required: true
+        default: "pizza"
+      - name: "json"
+        go_name: "JSON"
+        type: "string"
+        required: true
+        default: "1"
+      - name: "google_domain"
+        go_name: "GoogleDomain"
+        type: "string"
+        required: false
+        default: "google.com"
+      - name: "gl"
+        go_name: "Gl"
+        type: "string"
+        required: false
+      - name: "hl"
+        go_name: "Hl"
+        type: "string"
+        required: false
+      - name: "cr"
+        go_name: "Cr"
+        type: "string"
+        required: false
+      - name: "lr"
+        go_name: "Lr"
+        type: "string"
+        required: false
+      - name: "location"
+        go_name: "Location"
+        type: "string"
+        required: false
+      - name: "uule"
+        go_name: "Uule"
+        type: "string"
+        required: false
+      - name: "lat"
+        go_name: "Lat"
+        type: "string"
+        required: false
+      - name: "lon"
+        go_name: "Lon"
+        type: "string"
+        required: false
+      - name: "radius"
+        go_name: "Radius"
+        type: "string"
+        required: false
+      - name: "start"
+        go_name: "Start"
+        type: "string"
+        required: false
+        default: "0"
+      - name: "tbm"
+        go_name: "Tbm"
+        type: "string"
+        required: false
+        default: "isch"
+      - name: "ludocid"
+        go_name: "Ludocid"
+        type: "string"
+        required: false
+      - name: "lsig"
+        go_name: "Lsig"
+        type: "string"
+        required: false
+      - name: "kgmid"
+        go_name: "Kgmid"
+        type: "string"
+        required: false
+      - name: "si"
+        go_name: "Si"
+        type: "string"
+        required: false
+      - name: "ibp"
+        go_name: "Ibp"
+        type: "string"
+        required: false
+      - name: "uds"
+        go_name: "Uds"
+        type: "string"
+        required: false
+      - name: "tbs"
+        go_name: "Tbs"
+        type: "string"
+        required: false
+      - name: "safe"
+        go_name: "Safe"
+        type: "string"
+        required: false
+      - name: "nfpr"
+        go_name: "Nfpr"
+        type: "string"
+        required: false
+      - name: "filter"
+        go_name: "Filter"
+        type: "string"
+        required: false
+        default: "1"
+      - name: "device"
+        go_name: "Device"
+        type: "string"
+        required: false
+        default: "desktop"
+      - name: "render_js"
+        go_name: "RenderJs"
+        type: "string"
+        required: false
+      - name: "no_cache"
+        go_name: "NoCache"
+        type: "string"
+        required: false
+        default: "false"
+      - name: "ai_overview"
+        go_name: "AIOverview"
+        type: "string"
+        required: false
+  - name: "google_jobs"
+    group: "Google"
+    method: "Jobs"
+    request_type: "GoogleJobsRequest"
+    service_kind: "serp"
+    engine: "google_jobs"
+    params:
+      - name: "q"
+        go_name: "Q"
+        type: "string"
+        required: true
+      - name: "json"
+        go_name: "JSON"
+        type: "string"
+        required: true
+        default: "1"
+      - name: "google_domain"
+        go_name: "GoogleDomain"
+        type: "string"
+        required: false
+        default: "google.com"
+      - name: "gl"
+        go_name: "Gl"
+        type: "string"
+        required: false
+      - name: "hl"
+        go_name: "Hl"
+        type: "string"
+        required: false
+      - name: "location"
+        go_name: "Location"
+        type: "string"
+        required: false
+      - name: "uule"
+        go_name: "Uule"
+        type: "string"
+        required: false
+      - name: "next_page_token"
+        go_name: "NextPageToken"
+        type: "string"
+        required: false
+      - name: "chips"
+        go_name: "Chips"
+        type: "string"
+        required: false
+      - name: "lrad"
+        go_name: "Lrad"
+        type: "string"
+        required: false
+      - name: "ltype"
+        go_name: "Ltype"
+        type: "string"
+        required: false
+      - name: "uds"
+        go_name: "Uds"
+        type: "string"
+        required: false
+      - name: "no_cache"
+        go_name: "NoCache"
+        type: "string"
+        required: false
+        default: "false"
+  - name: "google_lens"
+    group: "Google"
+    method: "Lens"
+    request_type: "GoogleLensRequest"
+    service_kind: "serp"
+    engine: "google_lens"
+    params:
+      - name: "url"
+        go_name: "URL"
+        type: "string"
+        required: true
+      - name: "json"
+        go_name: "JSON"
+        type: "string"
+        required: true
+        default: "1"
+      - name: "hl"
+        go_name: "Hl"
+        type: "string"
+        required: false
+      - name: "country"
+        go_name: "Country"
+        type: "string"
+        required: false
+      - name: "type"
+        go_name: "Type"
+        type: "string"
+        required: false
+        default: "all"
+      - name: "q"
+        go_name: "Q"
+        type: "string"
+        required: false
+      - name: "safe"
+        go_name: "Safe"
+        type: "string"
+        required: false
+      - name: "no_cache"
+        go_name: "NoCache"
+        type: "string"
+        required: false
+        default: "false"
+  - name: "google_local"
+    group: "Google"
+    method: "Local"
+    request_type: "GoogleLocalRequest"
+    service_kind: "serp"
+    engine: "google_local"
+    params:
+      - name: "q"
+        go_name: "Q"
+        type: "string"
+        required: true
+      - name: "json"
+        go_name: "JSON"
+        type: "string"
+        required: true
+        default: "1"
+      - name: "google_domain"
+        go_name: "GoogleDomain"
+        type: "string"
+        required: false
+        default: "google.com"
+      - name: "gl"
+        go_name: "Gl"
+        type: "string"
+        required: false
+      - name: "hl"
+        go_name: "Hl"
+        type: "string"
+        required: false
+      - name: "location"
+        go_name: "Location"
+        type: "string"
+        required: false
+      - name: "uule"
+        go_name: "Uule"
+        type: "string"
+        required: false
+      - name: "start"
+        go_name: "Start"
+        type: "string"
+        required: false
+      - name: "ludocid"
+        go_name: "Ludocid"
+        type: "string"
+        required: false
+      - name: "tbs"
+        go_name: "Tbs"
+        type: "string"
+        required: false
+      - name: "no_cache"
+        go_name: "NoCache"
+        type: "string"
+        required: false
+        default: "false"
+  - name: "google_map_comment"
+    group: "Google"
+    method: "MapComment"
+    request_type: "GoogleMapCommentRequest"
+    service_kind: "scraper_builder"
+    spider_name: "google.com"
+    spider_id: "google_comment_by-url"
+    params:
+      - name: "url"
+        go_name: "URL"
+        type: "string"
+        required: true
+        default: "https://www.google.com/maps/place/Waterfront+Botanical+Gardens/@38.2630366,-85.7288454,15z/data=!4m8!3m7!1s0x8869731e16a7bdbd:0x2f5d238fefed7ca1!8m2!3d38.2632837!4d-85.7239738!9m1!1b1!16s%2Fg%2F11c709xzzx?hl=en&entry=ttu"
+      - name: "days_limit"
+        go_name: "DaysLimit"
+        type: "string"
+        required: false
+        default: "20"
+      - name: "file_name"
+        go_name: "FileName"
+        type: "string"
+        required: false
+        default: "{{TasksID}}"
+  - name: "google_map_details"
+    group: "Google"
+    method: "MapDetails"
+    request_type: "GoogleMapDetailsRequest"
+    service_kind: "scraper_builder"
+    spider_name: "google.com"
+    spider_id: "google_map-details_by-url"
+    params:
+      - name: "spider_id"
+        go_name: "SpiderID"
+        type: "string"
+        required: true
+        default: "google_map-details_by-url"
+      - name: "url"
+        go_name: "URL"
+        type: "string"
+        required: false
+        default: "https://www.google.com/maps/place/Pizza+Inn+Magdeburg/data=!4m7!3m6!1s0x47a5f50c083530a3:0xfdba8746b538141!8m2!3d52.1263086!4d11.6094743!16s%2Fg%2F11kqmtk3dt!19sChIJozA1CAz1pUcRQYFTa3So2w8?authuser=0&hl=en&rclk=1"
+      - name: "CID"
+        go_name: "CID"
+        type: "string"
+        required: false
+        default: "2476046430038551731"
+      - name: "keyword"
+        go_name: "Keyword"
+        type: "string"
+        required: false
+        default: "pizza"
+      - name: "country"
+        go_name: "Country"
+        type: "string"
+        required: false
+        default: "United States"
+      - name: "lat"
+        go_name: "Lat"
+        type: "string"
+        required: false
+        default: "38"
+      - name: "long"
+        go_name: "Long"
+        type: "string"
+        required: false
+        default: "77"
+      - name: "zoom_level"
+        go_name: "ZoomLevel"
+        type: "string"
+        required: false
+        default: "20"
+      - name: "place_id"
+        go_name: "PlaceID"
+        type: "string"
+        required: false
+        default: "ChIJ3S-JXmauEmsRUcIaWtf4MzE"
+      - name: "file_name"
+        go_name: "FileName"
+        type: "string"
+        required: false
+        default: "{{TasksID}}"
+  - name: "google_maps"
+    group: "Google"
+    method: "Maps"
+    request_type: "GoogleMapsRequest"
+    service_kind: "serp"
+    engine: "google_maps"
+    params:
+      - name: "q"
+        go_name: "Q"
+        type: "string"
+        required: true
+      - name: "json"
+        go_name: "JSON"
+        type: "string"
+        required: true
+        default: "1"
+      - name: "ll"
+        go_name: "Ll"
+        type: "string"
+        required: false
+      - name: "location"
+        go_name: "Location"
+        type: "string"
+        required: false
+      - name: "lat"
+        go_name: "Lat"
+        type: "string"
+        required: false
+      - name: "lon"
+        go_name: "Lon"
+        type: "string"
+        required: false
+      - name: "z"
+        go_name: "Z"
+        type: "string"
+        required: false
+      - name: "m"
+        go_name: "M"
+        type: "string"
+        required: false
+      - name: "nearby"
+        go_name: "Nearby"
+        type: "string"
+        required: false
+      - name: "google_domain"
+        go_name: "GoogleDomain"
+        type: "string"
+        required: false
+        default: "google.com"
+      - name: "hl"
+        go_name: "Hl"
+        type: "string"
+        required: false
+      - name: "gl"
+        go_name: "Gl"
+        type: "string"
+        required: false
+      - name: "start"
+        go_name: "Start"
+        type: "string"
+        required: false
+        default: "0"
+      - name: "type"
+        go_name: "Type"
+        type: "string"
+        required: false
+      - name: "data"
+        go_name: "Data"
+        type: "string"
+        required: false
+      - name: "place_id"
+        go_name: "PlaceID"
+        type: "string"
+        required: false
+      - name: "data_cid"
+        go_name: "DataCID"
+        type: "string"
+        required: false
+      - name: "no_cache"
+        go_name: "NoCache"
+        type: "string"
+        required: false
+        default: "false"
+  - name: "google_news"
+    group: "Google"
+    method: "News"
+    request_type: "GoogleNewsRequest"
+    service_kind: "serp"
+    engine: "google_news"
+    params:
+      - name: "q"
+        go_name: "Q"
+        type: "string"
+        required: true
+        default: "pizza"
+      - name: "json"
+        go_name: "JSON"
+        type: "string"
+        required: true
+        default: "1"
+      - name: "no_cache"
+        go_name: "NoCache"
+        type: "string"
+        required: false
+        default: "false"
+      - name: "gl"
+        go_name: "Gl"
+        type: "string"
+        required: false
+      - name: "hl"
+        go_name: "Hl"
+        type: "string"
+        required: false
+      - name: "topic_token"
+        go_name: "TopicToken"
+        type: "string"
+        required: false
+      - name: "kgmid"
+        go_name: "Kgmid"
+        type: "string"
+        required: false
+      - name: "publication_token"
+        go_name: "PublicationToken"
+        type: "string"
+        required: false
+      - name: "section_token"
+        go_name: "SectionToken"
+        type: "string"
+        required: false
+      - name: "story_token"
+        go_name: "StoryToken"
+        type: "string"
+        required: false
+      - name: "so"
+        go_name: "So"
+        type: "string"
+        required: false
+        default: "0"
+  - name: "google_patents"
+    group: "Google"
+    method: "Patents"
+    request_type: "GooglePatentsRequest"
+    service_kind: "serp"
+    engine: "google_patents"
+    params:
+      - name: "q"
+        go_name: "Q"
+        type: "string"
+        required: true
+      - name: "json"
+        go_name: "JSON"
+        type: "string"
+        required: true
+        default: "1"
+      - name: "page"
+        go_name: "Page"
+        type: "string"
+        required: false
+        default: "1"
+      - name: "num"
+        go_name: "Num"
+        type: "string"
+        required: false
+      - name: "sort"
+        go_name: "Sort"
+        type: "string"
+        required: false
+      - name: "clustered"
+        go_name: "Clustered"
+        type: "string"
+        required: false
+      - name: "dups"
+        go_name: "Dups"
+        type: "string"
+        required: false
+        default: "family"
+      - name: "patents"
+        go_name: "Patents"
+        type: "string"
+        required: false
+        default: "true"
+      - name: "scholar"
+        go_name: "Scholar"
+        type: "string"
+        required: false
+        default: "false"
+      - name: "before"
+        go_name: "Before"
+        type: "string"
+        required: false
+      - name: "after"
+        go_name: "After"
+        type: "string"
+        required: false
+      - name: "inventor"
+        go_name: "Inventor"
+        type: "string"
+        required: false
+      - name: "assignee"
+        go_name: "Assignee"
+        type: "string"
+        required: false
+      - name: "country"
+        go_name: "Country"
+        type: "string"
+        required: false
+      - name: "language"
+        go_name: "Language"
+        type: "string"
+        required: false
+      - name: "status"
+        go_name: "Status"
+        type: "string"
+        required: false
+      - name: "type"
+        go_name: "Type"
+        type: "string"
+        required: false
+      - name: "litigation"
+        go_name: "Litigation"
+        type: "string"
+        required: false
+      - name: "no_cache"
+        go_name: "NoCache"
+        type: "string"
+        required: false
+        default: "false"
+  - name: "google_play"
+    group: "Google"
+    method: "Play"
+    request_type: "GooglePlayRequest"
+    service_kind: "serp"
+    engine: "google_play"
+    params:
+      - name: "q"
+        go_name: "Q"
+        type: "string"
+        required: true
+      - name: "json"
+        go_name: "JSON"
+        type: "string"
+        required: true
+        default: "1"
+      - name: "hl"
+        go_name: "Hl"
+        type: "string"
+        required: false
+      - name: "gl"
+        go_name: "Gl"
+        type: "string"
+        required: false
+        default: "us"
+      - name: "apps_category"
+        go_name: "AppsCategory"
+        type: "string"
+        required: false
+      - name: "next_page_token"
+        go_name: "NextPageToken"
+        type: "string"
+        required: false
+      - name: "section_page_token"
+        go_name: "SectionPageToken"
+        type: "string"
+        required: false
+      - name: "chart"
+        go_name: "Chart"
+        type: "string"
+        required: false
+      - name: "see_more_token"
+        go_name: "SeeMoreToken"
+        type: "string"
+        required: false
+      - name: "store_device"
+        go_name: "StoreDevice"
+        type: "string"
+        required: false
+      - name: "age"
+        go_name: "Age"
+        type: "string"
+        required: false
+      - name: "no_cache"
+        go_name: "NoCache"
+        type: "string"
+        required: false
+        default: "false"
+  - name: "google_play_store_information"
+    group: "Google"
+    method: "PlayStoreInformation"
+    request_type: "GooglePlayStoreInformationRequest"
+    service_kind: "scraper_builder"
+    spider_name: "play.google.com"
+    spider_id: "google-play-store_information_by-url"
+    params:
+      - name: "app_url"
+        go_name: "AppURL"
+        type: "string"
+        required: true
+        default: "https://play.google.com/store/apps/details?id=com.linkedin.android"
+      - name: "file_name"
+        go_name: "FileName"
+        type: "string"
+        required: false
+        default: "{{TasksID}}"
+  - name: "google_play_store_reviews"
+    group: "Google"
+    method: "PlayStoreReviews"
+    request_type: "GooglePlayStoreReviewsRequest"
+    service_kind: "scraper_builder"
+    spider_name: "play.google.com"
+    spider_id: "google-play-store_reviews_by-url"
+    params:
+      - name: "app_url"
+        go_name: "AppURL"
+        type: "string"
+        required: true
+        default: "https://play.google.com/store/apps/details?id=com.linkedin.android"
+      - name: "file_name"
+        go_name: "FileName"
+        type: "string"
+        required: false
+        default: "{{TasksID}}"
+  - name: "google_scholar"
+    group: "Google"
+    method: "Scholar"
+    request_type: "GoogleScholarRequest"
+    service_kind: "serp"
+    engine: "google_scholar"
+    params:
+      - name: "q"
+        go_name: "Q"
+        type: "string"
+        required: false
+      - name: "json"
+        go_name: "JSON"
+        type: "string"
+        required: true
+        default: "1"
+      - name: "hl"
+        go_name: "Hl"
+        type: "string"
+        required: false
+      - name: "lr"
+        go_name: "Lr"
+        type: "string"
+        required: false
+      - name: "start"
+        go_name: "Start"
+        type: "string"
+        required: false
+        default: "0"
+      - name: "num"
+        go_name: "Num"
+        type: "string"
+        required: false
+        default: "10"
+      - name: "cites"
+        go_name: "Cites"
+        type: "string"
+        required: false
+      - name: "as_ylo"
+        go_name: "AsYlo"
+        type: "string"
+        required: false
+      - name: "as_yhi"
+        go_name: "AsYhi"
+        type: "string"
+        required: false
+      - name: "scisbd"
+        go_name: "Scisbd"
+        type: "string"
+        required: false
+        default: "0"
+      - name: "cluster"
+        go_name: "Cluster"
+        type: "string"
+        required: false
+      - name: "as_sdt"
+        go_name: "AsSdt"
+        type: "string"
+        required: false
+        default: "0"
+      - name: "safe"
+        go_name: "Safe"
+        type: "string"
+        required: false
+      - name: "filter"
+        go_name: "Filter"
+        type: "string"
+        required: false
+        default: "1"
+      - name: "as_vis"
+        go_name: "AsVis"
+        type: "string"
+        required: false
+        default: "0"
+      - name: "as_rr"
+        go_name: "AsRr"
+        type: "string"
+        required: false
+        default: "0"
+      - name: "no_cache"
+        go_name: "NoCache"
+        type: "string"
+        required: false
+        default: "false"
+  - name: "google_search"
+    group: "Google"
+    method: "Search"
+    request_type: "GoogleSearchRequest"
+    service_kind: "serp"
+    engine: "google"
+    params:
+      - name: "q"
+        go_name: "Q"
+        type: "string"
+        required: true
+        default: "pizza"
+      - name: "json"
+        go_name: "JSON"
+        type: "string"
+        required: true
+        default: "1"
+      - name: "google_domain"
+        go_name: "GoogleDomain"
+        type: "string"
+        required: false
+        default: "google.com"
+      - name: "gl"
+        go_name: "Gl"
+        type: "string"
+        required: false
+      - name: "hl"
+        go_name: "Hl"
+        type: "string"
+        required: false
+      - name: "cr"
+        go_name: "Cr"
+        type: "string"
+        required: false
+      - name: "lr"
+        go_name: "Lr"
+        type: "string"
+        required: false
+      - name: "location"
+        go_name: "Location"
+        type: "string"
+        required: false
+      - name: "uule"
+        go_name: "Uule"
+        type: "string"
+        required: false
+      - name: "start"
+        go_name: "Start"
+        type: "string"
+        required: false
+        default: "0"
+      - name: "tbs"
+        go_name: "Tbs"
+        type: "string"
+        required: false
+      - name: "safe"
+        go_name: "Safe"
+        type: "string"
+        required: false
+      - name: "nfpr"
+        go_name: "Nfpr"
+        type: "string"
+        required: false
+      - name: "filter"
+        go_name: "Filter"
+        type: "string"
+        required: false
+        default: "1"
+      - name: "device"
+        go_name: "Device"
+        type: "string"
+        required: false
+        default: "desktop"
+      - name: "render_js"
+        go_name: "RenderJs"
+        type: "string"
+        required: false
+      - name: "no_cache"
+        go_name: "NoCache"
+        type: "string"
+        required: false
+        default: "false"
+      - name: "ai_overview"
+        go_name: "AIOverview"
+        type: "string"
+        required: false
+  - name: "google_shopping"
+    group: "Google"
+    method: "Shopping"
+    request_type: "GoogleShoppingRequest"
+    service_kind: "serp"
+    engine: "google_shopping"
+    params:
+      - name: "q"
+        go_name: "Q"
+        type: "string"
+        required: false
+      - name: "json"
+        go_name: "JSON"
+        type: "string"
+        required: true
+        default: "1"
+      - name: "google_domain"
+        go_name: "GoogleDomain"
+        type: "string"
+        required: false
+        default: "google.com"
+      - name: "gl"
+        go_name: "Gl"
+        type: "string"
+        required: false
+      - name: "hl"
+        go_name: "Hl"
+        type: "string"
+        required: false
+      - name: "location"
+        go_name: "Location"
+        type: "string"
+        required: false
+      - name: "uule"
+        go_name: "Uule"
+        type: "string"
+        required: false
+      - name: "start"
+        go_name: "Start"
+        type: "string"
+        required: false
+      - name: "shoprs"
+        go_name: "Shoprs"
+        type: "string"
+        required: false
+      - name: "min_price"
+        go_name: "MinPrice"
+        type: "string"
+        required: false
+      - name: "max_price"
+        go_name: "MaxPrice"
+        type: "string"
+        required: false
+      - name: "sort_by"
+        go_name: "SortBy"
+        type: "string"
+        required: false
+      - name: "free_shipping"
+        go_name: "FreeShipping"
+        type: "string"
+        required: false
+      - name: "on_sale"
+        go_name: "OnSale"
+        type: "string"
+        required: false
+      - name: "small_business"
+        go_name: "SmallBusiness"
+        type: "string"
+        required: false
+      - name: "no_cache"
+        go_name: "NoCache"
+        type: "string"
+        required: false
+        default: "false"
+  - name: "google_shopping_info"
+    group: "Google"
+    method: "ShoppingInfo"
+    request_type: "GoogleShoppingInfoRequest"
+    service_kind: "scraper_builder"
+    spider_name: "google.com"
+    spider_id: "google_shopping_by-keywords"
+    params:
+      - name: "keyword"
+        go_name: "Keyword"
+        type: "string"
+        required: true
+        default: "iphone"
+      - name: "file_name"
+        go_name: "FileName"
+        type: "string"
+        required: false
+        default: "{{TasksID}}"
+  - name: "google_trends"
+    group: "Google"
+    method: "Trends"
+    request_type: "GoogleTrendsRequest"
+    service_kind: "serp"
+    engine: "google_trends"
+    params:
+      - name: "q"
+        go_name: "Q"
+        type: "string"
+        required: true
+        default: "pizza"
+      - name: "json"
+        go_name: "JSON"
+        type: "string"
+        required: true
+        default: "1"
+      - name: "hl"
+        go_name: "Hl"
+        type: "string"
+        required: false
+      - name: "geo"
+        go_name: "Geo"
+        type: "string"
+        required: false
+      - name: "region"
+        go_name: "Region"
+        type: "string"
+        required: false
+      - name: "data_type"
+        go_name: "DataType"
+        type: "string"
+        required: false
+      - name: "tz"
+        go_name: "Tz"
+        type: "string"
+        required: false
+        default: "420"
+      - name: "cat"
+        go_name: "Cat"
+        type: "string"
+        required: false
+        default: "0"
+      - name: "gprop"
+        go_name: "Gprop"
+        type: "string"
+        required: false
+      - name: "date"
+        go_name: "Date"
+        type: "string"
+        required: false
+      - name: "csv"
+        go_name: "Csv"
+        type: "string"
+        required: false
+      - name: "include_low_search_volume"
+        go_name: "IncludeLowSearchVolume"
+        type: "string"
+        required: false
+      - name: "no_cache"
+        go_name: "NoCache"
+        type: "string"
+        required: false
+        default: "false"
+  - name: "google_videos"
+    group: "Google"
+    method: "Videos"
+    request_type: "GoogleVideosRequest"
+    service_kind: "serp"
+    engine: "google_videos"
+    params:
+      - name: "q"
+        go_name: "Q"
+        type: "string"
+        required: true
+      - name: "json"
+        go_name: "JSON"
+        type: "string"
+        required: true
+        default: "1"
+      - name: "google_domain"
+        go_name: "GoogleDomain"
+        type: "string"
+        required: false
+        default: "google.com"
+      - name: "gl"
+        go_name: "Gl"
+        type: "string"
+        required: false
+      - name: "hl"
+        go_name: "Hl"
+        type: "string"
+        required: false
+      - name: "location"
+        go_name: "Location"
+        type: "string"
+        required: false
+      - name: "uule"
+        go_name: "Uule"
+        type: "string"
+        required: false
+      - name: "start"
+        go_name: "Start"
+        type: "string"
+        required: false
+      - name: "tbs"
+        go_name: "Tbs"
+        type: "string"
+        required: false
+      - name: "no_cache"
+        go_name: "NoCache"
+        type: "string"
+        required: false
+        default: "false"
+      - name: "lr"
+        go_name: "Lr"
+        type: "string"
+        required: false
+      - name: "safe"
+        go_name: "Safe"
+        type: "string"
+        required: false
+      - name: "nfpr"
+        go_name: "Nfpr"
+        type: "string"
+        required: false
+      - name: "filter"
+        go_name: "Filter"
+        type: "string"
+        required: false
+        default: "1"
+  - name: "indeed_companies_info"
+    group: "Indeed"
+    method: "CompaniesInfo"
+    request_type: "IndeedCompaniesInfoRequest"
+    service_kind: "scraper_builder"
+    spider_name: "indeed.com"
+    spider_id: "indeed_companies-info_by-company-list-url"
+    params:
+      - name: "spider_id"
+        go_name: "SpiderID"
+        type: "string"
+        required: true
+        default: "indeed_companies-info_by-company-list-url"
+      - name: "company_list_url"
+        go_name: "CompanyListURL"
+        type: "string"
+        required: false
+        default: "https://www.indeed.com/companies/browse-companies"
+      - name: "keyword"
+        go_name: "Keyword"
+        type: "string"
+        required: false
+        default: "openai"
+      - name: "industry"
+        go_name: "Industry"
+        type: "string"
+        required: false
+        default: "Accounting & Tax"
+      - name: "state"
+        go_name: "State"
+        type: "string"
+        required: false
+        default: "Alabama - 60 companies"
+      - name: "company_url"
+        go_name: "CompanyURL"
+        type: "string"
+        required: false
+        default: "https://www.indeed.com/cmp/Allstate-Insurance"
+      - name: "file_name"
+        go_name: "FileName"
+        type: "string"
+        required: false
+        default: "{{TasksID}}"
+  - name: "indeed_job_listings"
+    group: "Indeed"
+    method: "JobListings"
+    request_type: "IndeedJobListingsRequest"
+    service_kind: "scraper_builder"
+    spider_name: "indeed.com"
+    spider_id: "indeed_job-listings_by-job-url"
+    params:
+      - name: "job_url"
+        go_name: "JobURL"
+        type: "string"
+        required: true
+        default: "https://fr.indeed.com/viewjob?jk=55b3e5dfa0c2ff66"
+      - name: "file_name"
+        go_name: "FileName"
+        type: "string"
+        required: false
+        default: "{{TasksID}}"
+  - name: "instagram_comment"
+    group: "Instagram"
+    method: "Comment"
+    request_type: "InstagramCommentRequest"
+    service_kind: "scraper_builder"
+    spider_name: "instagram.com"
+    spider_id: "ins_comment_by-posturl"
+    params:
+      - name: "posturl"
+        go_name: "Posturl"
+        type: "string"
+        required: true
+        default: "https://www.instagram.com/cats_of_instagram/reel/C4GLo_eLO2e/"
+      - name: "file_name"
+        go_name: "FileName"
+        type: "string"
+        required: false
+        default: "{{TasksID}}"
+  - name: "instagram_profiles"
+    group: "Instagram"
+    method: "Profiles"
+    request_type: "InstagramProfilesRequest"
+    service_kind: "scraper_builder"
+    spider_name: "instagram.com"
+    spider_id: "ins_profiles_by-username"
+    params:
+      - name: "spider_id"
+        go_name: "SpiderID"
+        type: "string"
+        required: true
+        default: "ins_profiles_by-username"
+      - name: "username"
+        go_name: "Username"
+        type: "string"
+        required: false
+        default: "zoobarcelona"
+      - name: "profileurl"
+        go_name: "Profileurl"
+        type: "string"
+        required: false
+        default: "https://www.instagram.com/cats_of_world_/"
+      - name: "file_name"
+        go_name: "FileName"
+        type: "string"
+        required: false
+        default: "{{TasksID}}"
+  - name: "instagram_reel"
+    group: "Instagram"
+    method: "Reel"
+    request_type: "InstagramReelRequest"
+    service_kind: "scraper_builder"
+    spider_name: "instagram.com"
+    spider_id: "ins_reel_by-url"
+    params:
+      - name: "spider_id"
+        go_name: "SpiderID"
+        type: "string"
+        required: true
+        default: "ins_reel_by-url"
+      - name: "url"
+        go_name: "URL"
+        type: "string"
+        required: true
+        default: "https://www.instagram.com/reel/C5Rdyj_q7YN/"
+      - name: "num_of_posts"
+        go_name: "NumOfPosts"
+        type: "string"
+        required: false
+        default: "10"
+      - name: "posts_to_not_include"
+        go_name: "PostsToNotInclude"
+        type: "string"
+        required: false
+        default: "DP861NijuwE"
+      - name: "start_date"
+        go_name: "StartDate"
+        type: "string"
+        required: false
+        default: "01-28-2025"
+      - name: "end_date"
+        go_name: "EndDate"
+        type: "string"
+        required: false
+        default: "01-28-2026"
+      - name: "file_name"
+        go_name: "FileName"
+        type: "string"
+        required: false
+        default: "{{TasksID}}"
+  - name: "linkedin_company_information"
+    group: "LinkedIn"
+    method: "CompanyInformation"
+    request_type: "LinkedInCompanyInformationRequest"
+    service_kind: "scraper_builder"
+    spider_name: "linkedin.com"
+    spider_id: "linkedin_company_information_by-url"
+    params:
+      - name: "url"
+        go_name: "URL"
+        type: "string"
+        required: true
+        default: "https://www.linkedin.com/company/dynamo-software"
+      - name: "file_name"
+        go_name: "FileName"
+        type: "string"
+        required: false
+        default: "{{TasksID}}"
+  - name: "linkedin_job_listings_information"
+    group: "LinkedIn"
+    method: "JobListingsInformation"
+    request_type: "LinkedInJobListingsInformationRequest"
+    service_kind: "scraper_builder"
+    spider_name: "linkedin.com"
+    spider_id: "linkedin_job_listings_information_by-job-listing-url"
+    params:
+      - name: "spider_id"
+        go_name: "SpiderID"
+        type: "string"
+        required: true
+        default: "linkedin_job_listings_information_by-job-listing-url"
+      - name: "job_listing_url"
+        go_name: "JobListingURL"
+        type: "string"
+        required: false
+        default: "https://www.linkedin.com/jobs/reddit-inc.-jobs-worldwide?f_C=150573"
+      - name: "job_url"
+        go_name: "JobURL"
+        type: "string"
+        required: false
+        default: "https://www.linkedin.com/jobs/view/senior-client-partner-large-customer-sales-gaming-at-reddit-inc-4303761033?position=10&pageNum=0&refId=kHRQtl6Ws14VG9y3UloI4w%3D%3D&trackingId=%2Fb2esqHHEjp1FoEkC8PfuQ%3D%3D"
+      - name: "location"
+        go_name: "Location"
+        type: "string"
+        required: false
+        default: "New York"
+      - name: "keyword"
+        go_name: "Keyword"
+        type: "string"
+        required: false
+        default: "product manager"
+      - name: "file_name"
+        go_name: "FileName"
+        type: "string"
+        required: false
+        default: "{{TasksID}}"
+  - name: "reddit_comment"
+    group: "Reddit"
+    method: "Comment"
+    request_type: "RedditCommentRequest"
+    service_kind: "scraper_builder"
+    spider_name: "reddit.com"
+    spider_id: "reddit_comment_by-url"
+    params:
+      - name: "url"
+        go_name: "URL"
+        type: "string"
+        required: true
+        default: "https://www.reddit.com/r/datascience/comments/1cmnf0m/comment/l32204i/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button"
+      - name: "days_back"
+        go_name: "DaysBack"
+        type: "string"
+        required: false
+        default: "10"
+      - name: "comment_limit"
+        go_name: "CommentLimit"
+        type: "string"
+        required: false
+        default: "5"
+      - name: "file_name"
+        go_name: "FileName"
+        type: "string"
+        required: false
+        default: "{{TasksID}}"
+  - name: "reddit_posts"
+    group: "Reddit"
+    method: "Posts"
+    request_type: "RedditPostsRequest"
+    service_kind: "scraper_builder"
+    spider_name: "reddit.com"
+    spider_id: "reddit_posts_by-url"
+    params:
+      - name: "spider_id"
+        go_name: "SpiderID"
+        type: "string"
+        required: true
+        default: "reddit_posts_by-url"
+      - name: "url"
+        go_name: "URL"
+        type: "string"
+        required: false
+        default: "https://www.reddit.com/r/battlefield2042/comments/1cmqs1d/official_update_on_the_next_battlefield_game/"
+      - name: "keyword"
+        go_name: "Keyword"
+        type: "string"
+        required: false
+        default: "datascience"
+      - name: "num_of_posts"
+        go_name: "NumOfPosts"
+        type: "string"
+        required: false
+        default: "10"
+      - name: "sort_by"
+        go_name: "SortBy"
+        type: "string"
+        required: false
+        default: "Rising"
+      - name: "sort_by_time"
+        go_name: "SortByTime"
+        type: "string"
+        required: false
+        default: "Now"
+      - name: "file_name"
+        go_name: "FileName"
+        type: "string"
+        required: false
+        default: "{{TasksID}}"
+  - name: "request_web_unlocker"
+    group: "WebUnlocker"
+    method: "Request"
+    request_type: "RequestWebUnlockerRequest"
+    service_kind: "web_unlocker"
+    params:
+      - name: "url"
+        go_name: "URL"
+        type: "string"
+        required: true
+      - name: "type"
+        go_name: "Type"
+        type: "string"
+        required: false
+        default: "html"
+      - name: "js_render"
+        go_name: "JsRender"
+        type: "string"
+        required: false
+        default: "True"
+      - name: "block_resources"
+        go_name: "BlockResources"
+        type: "string"
+        required: false
+      - name: "clean_content"
+        go_name: "CleanContent"
+        type: "string"
+        required: false
+      - name: "country"
+        go_name: "Country"
+        type: "string"
+        required: false
+        default: "us"
+      - name: "headers"
+        go_name: "Headers"
+        type: "string"
+        required: false
+      - name: "cookies"
+        go_name: "Cookies"
+        type: "string"
+        required: false
+      - name: "wait"
+        go_name: "Wait"
+        type: "string"
+        required: false
+      - name: "wait_for"
+        go_name: "WaitFor"
+        type: "string"
+        required: false
+      - name: "follow_redirect"
+        go_name: "FollowRedirect"
+        type: "string"
+        required: false
+        default: "True"
+  - name: "tiktok_comment"
+    group: "TikTok"
+    method: "Comment"
+    request_type: "TikTokCommentRequest"
+    service_kind: "scraper_builder"
+    spider_name: "tiktok.com"
+    spider_id: "tiktok_comment_by-url"
+    params:
+      - name: "url"
+        go_name: "URL"
+        type: "string"
+        required: true
+        default: "https://www.tiktok.com/@heymrcat/video/7216019547806092550"
+      - name: "page_turning"
+        go_name: "PageTurning"
+        type: "string"
+        required: true
+        default: "1"
+      - name: "file_name"
+        go_name: "FileName"
+        type: "string"
+        required: false
+        default: "{{TasksID}}"
+  - name: "tiktok_posts"
+    group: "TikTok"
+    method: "Posts"
+    request_type: "TikTokPostsRequest"
+    service_kind: "scraper_builder"
+    spider_name: "tiktok.com"
+    spider_id: "tiktok_posts_by-listurl"
+    params:
+      - name: "url"
+        go_name: "URL"
+        type: "string"
+        required: true
+        default: "https://www.tiktok.com/discover/dog"
+      - name: "num_of_posts"
+        go_name: "NumOfPosts"
+        type: "string"
+        required: false
+        default: "5"
+      - name: "file_name"
+        go_name: "FileName"
+        type: "string"
+        required: false
+        default: "{{TasksID}}"
+  - name: "tiktok_profiles"
+    group: "TikTok"
+    method: "Profiles"
+    request_type: "TikTokProfilesRequest"
+    service_kind: "scraper_builder"
+    spider_name: "tiktok.com"
+    spider_id: "tiktok_profiles_by-url"
+    params:
+      - name: "spider_id"
+        go_name: "SpiderID"
+        type: "string"
+        required: true
+        default: "tiktok_profiles_by-url"
+      - name: "url"
+        go_name: "URL"
+        type: "string"
+        required: false
+        default: "https://www.tiktok.com/@fofimdmell"
+      - name: "search_url"
+        go_name: "SearchURL"
+        type: "string"
+        required: false
+        default: "https://www.tiktok.com/explore?lang=en"
+      - name: "country"
+        go_name: "Country"
+        type: "string"
+        required: false
+        default: "us"
+      - name: "page_turning"
+        go_name: "PageTurning"
+        type: "string"
+        required: false
+        default: "1"
+      - name: "file_name"
+        go_name: "FileName"
+        type: "string"
+        required: false
+        default: "{{TasksID}}"
+  - name: "tiktok_shop"
+    group: "TikTok"
+    method: "Shop"
+    request_type: "TikTokShopRequest"
+    service_kind: "scraper_builder"
+    spider_name: "tiktok.com"
+    spider_id: "tiktok_shop_by-url"
+    params:
+      - name: "url"
+        go_name: "URL"
+        type: "string"
+        required: true
+        default: "https://www.tiktok.com/shop/pdp/long-sleeve-crew-neck-tee-3-pack-by-galaxy-by-harvic-cotton-blend/1729461570693075200"
+      - name: "file_name"
+        go_name: "FileName"
+        type: "string"
+        required: false
+        default: "{{TasksID}}"
+  - name: "twitter_post"
+    group: "Twitter"
+    method: "Post"
+    request_type: "TwitterPostRequest"
+    service_kind: "scraper_builder"
+    spider_name: "x.com"
+    spider_id: "twitter_post_by-profileurl"
+    params:
+      - name: "url"
+        go_name: "URL"
+        type: "string"
+        required: true
+        default: "https://x.com/elonmusk"
+      - name: "file_name"
+        go_name: "FileName"
+        type: "string"
+        required: false
+        default: "{{TasksID}}"
+  - name: "twitter_profile"
+    group: "Twitter"
+    method: "Profile"
+    request_type: "TwitterProfileRequest"
+    service_kind: "scraper_builder"
+    spider_name: "x.com"
+    spider_id: "twitter_profile_by-profileurl"
+    params:
+      - name: "spider_id"
+        go_name: "SpiderID"
+        type: "string"
+        required: true
+        default: "twitter_profile_by-profileurl"
+      - name: "url"
+        go_name: "URL"
+        type: "string"
+        required: false
+        default: "https://x.com/elonmusk"
+      - name: "user_name"
+        go_name: "UserName"
+        type: "string"
+        required: false
+        default: "elonmusk"
+      - name: "file_name"
+        go_name: "FileName"
+        type: "string"
+        required: false
+        default: "{{TasksID}}"
+  - name: "walmart_product"
+    group: "Walmart"
+    method: "Product"
+    request_type: "WalmartProductRequest"
+    service_kind: "scraper_builder"
+    spider_name: "walmart.com"
+    spider_id: "walmart_product_by-url"
+    params:
+      - name: "spider_id"
+        go_name: "SpiderID"
+        type: "string"
+        required: true
+        default: "walmart_product_by-url"
+      - name: "url"
+        go_name: "URL"
+        type: "string"
+        required: false
+        default: "https://www.walmart.com/ip/HI-CHEW-Stand-Up-Pouch-Getaway-Mix-11-65oz/12284762931?athAsset=eyJhdGhjcGlkIjoiMTIyODQ3NjI5MzEiLCJhdGhzdGlkIjoiQ1MwNTV+Q1MwMDR+Q1MwOTgiLCJhdGhlZSI6eyJhIjoyNy44NCwiYiI6Mjk1MS40MSwidyI6MC4wMDk0MjcxMjc3OTA0NzcxMjMsImwiOjAuNX0sImF0aHBvc2IiOiI4IiwiYXRoYW5jaWQiOiIxMDE2NDUwNzU1IiwiYXRocmsiOjAuMH0%3D&athena=true&adsRedirect=true"
+      - name: "category_url"
+        go_name: "CategoryURL"
+        type: "string"
+        required: false
+        default: "https://www.walmart.com/shop/deals/food/"
+      - name: "sku"
+        go_name: "Sku"
+        type: "string"
+        required: false
+        default: "439179861"
+      - name: "keyword"
+        go_name: "Keyword"
+        type: "string"
+        required: false
+        default: "leggins"
+      - name: "domain"
+        go_name: "Domain"
+        type: "string"
+        required: false
+        default: "https://www.walmart.com/"
+      - name: "all_variations"
+        go_name: "AllVariations"
+        type: "string"
+        required: false
+      - name: "page_turning"
+        go_name: "PageTurning"
+        type: "string"
+        required: false
+      - name: "file_name"
+        go_name: "FileName"
+        type: "string"
+        required: false
+        default: "{{TasksID}}"
+  - name: "yandex_search"
+    group: "Yandex"
+    method: "Search"
+    request_type: "YandexSearchRequest"
+    service_kind: "serp"
+    engine: "yandex"
+    params:
+      - name: "text"
+        go_name: "Text"
+        type: "string"
+        required: true
+      - name: "json"
+        go_name: "JSON"
+        type: "string"
+        required: true
+        default: "1"
+      - name: "yandex_domain"
+        go_name: "YandexDomain"
+        type: "string"
+        required: false
+        default: "yandex.com"
+      - name: "lang"
+        go_name: "Lang"
+        type: "string"
+        required: false
+        default: "en"
+      - name: "lr"
+        go_name: "Lr"
+        type: "string"
+        required: false
+      - name: "p"
+        go_name: "P"
+        type: "string"
+        required: false
+        default: "0"
+      - name: "family_mode"
+        go_name: "FamilyMode"
+        type: "string"
+        required: false
+        default: "1"
+      - name: "fix_typo"
+        go_name: "FixTypo"
+        type: "string"
+        required: false
+        default: "true"
+      - name: "groups_on_page"
+        go_name: "GroupsOnPage"
+        type: "string"
+        required: false
+        default: "10"
+      - name: "no_cache"
+        go_name: "NoCache"
+        type: "string"
+        required: false
+        default: "false"
+  - name: "youtube_audio"
+    group: "YouTube"
+    method: "Audio"
+    request_type: "YouTubeAudioRequest"
+    service_kind: "scraper_builder"
+    spider_name: "youtube.com"
+    spider_id: "youtube_audio_by-url"
+    params:
+      - name: "url"
+        go_name: "URL"
+        type: "string"
+        required: true
+        default: "https://www.youtube.com/watch?v=_SdpvpvVrLY"
+      - name: "subtitles_language"
+        go_name: "SubtitlesLanguage"
+        type: "string"
+        required: false
+        default: "ab"
+      - name: "selected_only"
+        go_name: "SelectedOnly"
+        type: "string"
+        required: false
+        default: "false"
+      - name: "kilohertz"
+        go_name: "Kilohertz"
+        type: "string"
+        required: false
+        default: "<=48000"
+      - name: "is_subtitles"
+        go_name: "IsSubtitles"
+        type: "string"
+        required: false
+        default: "false"
+      - name: "audio_format"
+        go_name: "AudioFormat"
+        type: "string"
+        required: false
+        default: "opus"
+      - name: "bitrate"
+        go_name: "Bitrate"
+        type: "string"
+        required: false
+        default: "<=320"
+      - name: "file_name"
+        go_name: "FileName"
+        type: "string"
+        required: false
+        default: "{{TasksID}}"
+  - name: "youtube_comment"
+    group: "YouTube"
+    method: "Comment"
+    request_type: "YouTubeCommentRequest"
+    service_kind: "scraper_builder"
+    spider_name: "youtube.com"
+    spider_id: "youtube_comment_by-id"
+    params:
+      - name: "video_id"
+        go_name: "VideoID"
+        type: "string"
+        required: true
+        default: "8RePenzQH80"
+      - name: "load_replies"
+        go_name: "LoadReplies"
+        type: "string"
+        required: true
+        default: "10"
+      - name: "num_of_comments"
+        go_name: "NumOfComments"
+        type: "string"
+        required: true
+        default: "Top comments"
+      - name: "file_name"
+        go_name: "FileName"
+        type: "string"
+        required: false
+        default: "{{TasksID}}"
+  - name: "youtube_product"
+    group: "YouTube"
+    method: "Product"
+    request_type: "YouTubeProductRequest"
+    service_kind: "scraper_builder"
+    spider_name: "youtube.com"
+    spider_id: "youtube_product_by-id"
+    params:
+      - name: "video_id"
+        go_name: "VideoID"
+        type: "string"
+        required: true
+        default: "8RePenzQH80"
+      - name: "subtitles_language"
+        go_name: "SubtitlesLanguage"
+        type: "string"
+        required: false
+        default: "ab"
+      - name: "subtitles_type"
+        go_name: "SubtitlesType"
+        type: "string"
+        required: false
+        default: "auto_generated"
+      - name: "selected_only"
+        go_name: "SelectedOnly"
+        type: "string"
+        required: false
+        default: "false"
+      - name: "file_name"
+        go_name: "FileName"
+        type: "string"
+        required: false
+        default: "{{TasksID}}"
+  - name: "youtube_profiles"
+    group: "YouTube"
+    method: "Profiles"
+    request_type: "YouTubeProfilesRequest"
+    service_kind: "scraper_builder"
+    spider_name: "youtube.com"
+    spider_id: "youtube_profiles_by-keyword"
+    params:
+      - name: "spider_id"
+        go_name: "SpiderID"
+        type: "string"
+        required: true
+        default: "youtube_profiles_by-keyword"
+      - name: "keyword"
+        go_name: "Keyword"
+        type: "string"
+        required: false
+        default: "MrBeast"
+      - name: "page_turning"
+        go_name: "PageTurning"
+        type: "string"
+        required: false
+        default: "1"
+      - name: "url"
+        go_name: "URL"
+        type: "string"
+        required: false
+        default: "https://www.youtube.com/@mrbeast"
+      - name: "file_name"
+        go_name: "FileName"
+        type: "string"
+        required: false
+        default: "{{TasksID}}"
+  - name: "youtube_transcript"
+    group: "YouTube"
+    method: "Transcript"
+    request_type: "YouTubeTranscriptRequest"
+    service_kind: "scraper_builder"
+    spider_name: "youtube.com"
+    spider_id: "youtube_transcript_by-id"
+    params:
+      - name: "video_id"
+        go_name: "VideoID"
+        type: "string"
+        required: true
+        default: "8RePenzQH80"
+      - name: "subtitles_language"
+        go_name: "SubtitlesLanguage"
+        type: "string"
+        required: false
+        default: "ab"
+      - name: "subtitles_type"
+        go_name: "SubtitlesType"
+        type: "string"
+        required: false
+        default: "auto_generated"
+      - name: "selected_only"
+        go_name: "SelectedOnly"
+        type: "string"
+        required: false
+        default: "false"
+      - name: "file_name"
+        go_name: "FileName"
+        type: "string"
+        required: false
+        default: "{{TasksID}}"
+  - name: "youtube_video"
+    group: "YouTube"
+    method: "Video"
+    request_type: "YouTubeVideoRequest"
+    service_kind: "scraper_builder"
+    spider_name: "youtube.com"
+    spider_id: "youtube_video_by-url"
+    params:
+      - name: "url"
+        go_name: "URL"
+        type: "string"
+        required: true
+        default: "https://www.youtube.com/watch?v=_SdpvpvVrLY"
+      - name: "subtitles_language"
+        go_name: "SubtitlesLanguage"
+        type: "string"
+        required: false
+        default: "ab"
+      - name: "selected_only"
+        go_name: "SelectedOnly"
+        type: "string"
+        required: false
+        default: "false"
+      - name: "resolution"
+        go_name: "Resolution"
+        type: "string"
+        required: false
+        default: "<=360p"
+      - name: "video_codec"
+        go_name: "VideoCodec"
+        type: "string"
+        required: false
+        default: "vp9"
+      - name: "audio_format"
+        go_name: "AudioFormat"
+        type: "string"
+        required: false
+        default: "opus"
+      - name: "bitrate"
+        go_name: "Bitrate"
+        type: "string"
+        required: false
+        default: "<=320"
+      - name: "file_name"
+        go_name: "FileName"
+        type: "string"
+        required: false
+        default: "{{TasksID}}"
+  - name: "youtube_video_post"
+    group: "YouTube"
+    method: "VideoPost"
+    request_type: "YouTubeVideoPostRequest"
+    service_kind: "scraper_builder"
+    spider_name: "youtube.com"
+    spider_id: "youtube_video-post_by-url"
+    params:
+      - name: "spider_id"
+        go_name: "SpiderID"
+        type: "string"
+        required: true
+        default: "youtube_video-post_by-url"
+      - name: "url"
+        go_name: "URL"
+        type: "string"
+        required: false
+        default: "https://www.youtube.com/@stephcurry/videos"
+      - name: "order_by"
+        go_name: "OrderBy"
+        type: "string"
+        required: false
+        default: "Latest"
+      - name: "start_index"
+        go_name: "StartIndex"
+        type: "string"
+        required: false
+        default: "1"
+      - name: "num_of_posts"
+        go_name: "NumOfPosts"
+        type: "string"
+        required: false
+        default: "5"
+      - name: "keyword_search"
+        go_name: "KeywordSearch"
+        type: "string"
+        required: false
+        default: "popular music"
+      - name: "features"
+        go_name: "Features"
+        type: "string"
+        required: false
+        default: "All"
+      - name: "type"
+        go_name: "Type"
+        type: "string"
+        required: false
+        default: "Video"
+      - name: "duration"
+        go_name: "Duration"
+        type: "string"
+        required: false
+        default: "Under 3 minutes"
+      - name: "upload_date"
+        go_name: "UploadDate"
+        type: "string"
+        required: false
+        default: "上一小时"
+      - name: "hashtag"
+        go_name: "Hashtag"
+        type: "string"
+        required: false
+        default: "shopping"
+      - name: "keyword"
+        go_name: "Keyword"
+        type: "string"
+        required: false
+        default: "top videos"
+      - name: "all_tabs"
+        go_name: "AllTabs"
+        type: "string"
+        required: false
+        default: "true"
+      - name: "file_name"
+        go_name: "FileName"
+        type: "string"
+        required: false
+        default: "{{TasksID}}"
+  - name: "zillow_product"
+    group: "Zillow"
+    method: "Product"
+    request_type: "ZillowProductRequest"
+    service_kind: "scraper_builder"
+    spider_name: "zillow.com"
+    spider_id: "zillow_product_by-filter"
+    params:
+      - name: "keywords-location"
+        go_name: "KeywordsLocation"
+        type: "string"
+        required: true
+        default: "South Bend"
+      - name: "listingCategory"
+        go_name: "Listingcategory"
+        type: "string"
+        required: false
+        default: "For Rent"
+      - name: "HomeType"
+        go_name: "Hometype"
+        type: "string"
+        required: false
+        default: "Houses"
+      - name: "days_on_zillow"
+        go_name: "DaysOnZillow"
+        type: "string"
+        required: false
+        default: "Any"
+      - name: "maximum"
+        go_name: "Maximum"
+        type: "string"
+        required: false
+        default: "10"
+      - name: "file_name"
+        go_name: "FileName"
+        type: "string"
+        required: false
+        default: "{{TasksID}}"

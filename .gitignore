@@ -1,0 +1,30 @@
+# Go build/test artifacts
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+coverage.out
+
+# Local Go caches
+.gocache/
+.gotmp/
+
+# Local environment/secrets
+.env
+.env.*
+*.pem
+*.key
+
+# Logs and temporary files
+*.log
+*.tmp
+*.tmp.exe
+live*.go
+live*.json
+
+# Internal comparison artifacts
+docs/ts-go-diff.*
+internal/tools/compare-ts-go.cjs
