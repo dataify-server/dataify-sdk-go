@@ -367,7 +367,7 @@ func splitWords(s string) []string {
 	return out
 }
 
-func goMod() string { return "module github.com/dataify-server/dataify-go-sdk\n\ngo 1.20\n" }
+func goMod() string { return "module github.com/dataify-server/dataify-sdk-go\n\ngo 1.20\n" }
 
 func clientGo(tools []Tool) string {
 	groups := uniqueGroups(tools)
@@ -687,7 +687,7 @@ This SDK exposes Go methods for Dataify API Key based runtime tools. SERP, Web U
 ## Install
 
 `+"```bash"+`
-go get github.com/dataify-server/dataify-go-sdk
+go get github.com/dataify-server/dataify-sdk-go
 `+"```"+`
 
 ## Usage

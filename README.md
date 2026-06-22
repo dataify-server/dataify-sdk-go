@@ -7,7 +7,7 @@ This SDK exposes Go methods for Dataify API Key based runtime tools. SERP, Web U
 ## Install
 
 ```bash
-go get github.com/dataify-server/dataify-go-sdk
+go get github.com/dataify-server/dataify-sdk-go
 ```
 
 ## Usage
