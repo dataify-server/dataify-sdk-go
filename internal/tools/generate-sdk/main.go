@@ -383,7 +383,9 @@ import (
     "io"
     "net/http"
     "net/url"
+    "os"
     "strings"
+    "sync"
     "time"
 )
 
@@ -391,9 +393,17 @@ const (
     defaultSERPBaseURL = "https://scraperapi.dataify.com"
     defaultScraperBaseURL = "https://scraperapi.dataify.com"
     defaultWebUnlockerBaseURL = "https://webunlocker.dataify.com"
+    standardTokenEnv = "DATAIFY_API_TOKEN"
+    legacyTokenEnv = "DATAIFY_TOKEN"
+    legacyAPIKeyEnv = "DATAIFY_API_KEY"
 )
 
-var ErrMissingToken = errors.New("dataify: missing API token")
+var (
+    ErrMissingToken = errors.New("dataify: missing API token; set DATAIFY_API_TOKEN (legacy DATAIFY_TOKEN and DATAIFY_API_KEY are also supported)")
+    legacyTokenEnvWarningOnce = &sync.Once{}
+    legacyAPIKeyEnvWarningOnce = &sync.Once{}
+    legacyTokenWarningWriter io.Writer = os.Stderr
+)
 
 type APIError struct {
     StatusCode int
@@ -410,6 +420,7 @@ type Client struct {
     serpBaseURL string
     scraperBaseURL string
     webUnlockerBaseURL string
+    Scraper *ScraperService
 `)
 	for _, g := range groups {
 		fmt.Fprintf(&b, "    %s *%sService\n", g, g)
@@ -425,19 +436,73 @@ func WithWebUnlockerBaseURL(baseURL string) Option { return func(c *Client) { c.
 func WithTimeout(timeout time.Duration) Option { return func(c *Client) { if timeout > 0 { c.httpClient.Timeout = timeout } } }
 
 func NewClient(token string, opts ...Option) *Client {
+    resolvedToken := strings.TrimSpace(token)
+    if resolvedToken == "" {
+        resolvedToken = TokenFromEnv()
+    } else {
+        warnIfLegacyEnvironmentToken(resolvedToken)
+    }
+
     c := &Client{
-        token: strings.TrimSpace(token),
+        token: resolvedToken,
         httpClient: &http.Client{Timeout: 120 * time.Second},
         serpBaseURL: defaultSERPBaseURL,
         scraperBaseURL: defaultScraperBaseURL,
         webUnlockerBaseURL: defaultWebUnlockerBaseURL,
     }
     for _, opt := range opts { if opt != nil { opt(c) } }
+	c.Scraper = &ScraperService{client: c}
 `)
 	for _, g := range groups {
 		fmt.Fprintf(&b, "    c.%s = &%sService{client: c}\n", g, g)
 	}
 	b.WriteString(`    return c
+}
+
+// TokenFromEnv returns the first configured Dataify credential from the standard
+// environment variable and its legacy compatibility aliases.
+func TokenFromEnv() string {
+    if token := environmentToken(standardTokenEnv); token != "" {
+        return token
+    }
+    if token := environmentToken(legacyTokenEnv); token != "" {
+        warnLegacyTokenEnvironment(legacyTokenEnv)
+        return token
+    }
+    if token := environmentToken(legacyAPIKeyEnv); token != "" {
+        warnLegacyTokenEnvironment(legacyAPIKeyEnv)
+        return token
+    }
+    return ""
+}
+
+func environmentToken(name string) string {
+    return strings.TrimSpace(os.Getenv(name))
+}
+
+func warnIfLegacyEnvironmentToken(token string) {
+    if token == environmentToken(legacyTokenEnv) && token != "" {
+        warnLegacyTokenEnvironment(legacyTokenEnv)
+        return
+    }
+    if token == environmentToken(legacyAPIKeyEnv) && token != "" {
+        warnLegacyTokenEnvironment(legacyAPIKeyEnv)
+    }
+}
+
+func warnLegacyTokenEnvironment(name string) {
+    var once *sync.Once
+    switch name {
+    case legacyTokenEnv:
+        once = legacyTokenEnvWarningOnce
+    case legacyAPIKeyEnv:
+        once = legacyAPIKeyEnvWarningOnce
+    default:
+        return
+    }
+    once.Do(func() {
+        fmt.Fprintf(legacyTokenWarningWriter, "dataify: %s 已兼容读取，建议迁移至 DATAIFY_API_TOKEN。\n", name)
+    })
 }
 
 func (c *Client) doForm(ctx context.Context, baseURL, path string, values map[string]string) (*RawResponse, error) {
@@ -693,13 +758,47 @@ go get github.com/dataify-server/dataify-sdk-go
 ## Usage
 
 `+"```go"+`
-client := dataify.NewClient("YOUR_DATAIFY_API_TOKEN")
+token := dataify.TokenFromEnv()
+client := dataify.NewClient(token)
 resp, err := client.Google.Search(ctx, dataify.GoogleSearchRequest{Q: "coffee", JSON: "1"})
 `+"```"+`
+
+## Scraper Task Status
+
+`+"```go"+`
+status, err := client.Scraper.TaskStatus(ctx, "task_id_here")
+if err != nil {
+    // HTTP 400: task does not exist or is not owned by this API key.
+    // HTTP 403: missing task_id or invalid API key.
+}
+fmt.Println(status.Data.Status) // 处理中, 成功, or 失败
+`+"```"+`
+
+## Scraper Task Download
+
+`+"```go"+`
+result, err := client.Scraper.DownloadTaskResult(ctx, "task_id_here")
+// result is a RawResponse containing the JSON result.
+
+response, err := client.Scraper.DownloadTaskFile(ctx, "task_id_here", dataify.ScraperDownloadXLSX)
+if err == nil {
+    defer response.Body.Close()
+    // Stream or save the CSV/XLSX body.
+}
+`+"```"+`
+
+Set `+"`DATAIFY_API_TOKEN`"+` for new integrations. `+"`DATAIFY_TOKEN`"+` and
+`+"`DATAIFY_API_KEY`"+` remain supported as compatibility aliases.
+When a legacy variable supplies the credential, the SDK writes a one-time
+migration warning to standard error without including the credential value.
+
+Detailed Chinese usage guide: [docs/USAGE.zh-CN.md](docs/USAGE.zh-CN.md).
 
 ## Tool Count
 
 %d API Key runtime tools are documented in docs/tools.md and docs/tools.yaml.
+Task status is a separate Scraper runtime method and is not included in that count.
+Task downloads are also separate Scraper runtime methods and are not included in that count.
 `, len(tools))
 }
 

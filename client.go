@@ -9,7 +9,9 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"os"
 	"strings"
+	"sync"
 	"time"
 )
 
@@ -17,9 +19,17 @@ const (
 	defaultSERPBaseURL        = "https://scraperapi.dataify.com"
 	defaultScraperBaseURL     = "https://scraperapi.dataify.com"
 	defaultWebUnlockerBaseURL = "https://webunlocker.dataify.com"
+	standardTokenEnv          = "DATAIFY_API_TOKEN"
+	legacyTokenEnv            = "DATAIFY_TOKEN"
+	legacyAPIKeyEnv           = "DATAIFY_API_KEY"
 )
 
-var ErrMissingToken = errors.New("dataify: missing API token")
+var (
+	ErrMissingToken                      = errors.New("dataify: missing API token; set DATAIFY_API_TOKEN (legacy DATAIFY_TOKEN and DATAIFY_API_KEY are also supported)")
+	legacyTokenEnvWarningOnce            = &sync.Once{}
+	legacyAPIKeyEnvWarningOnce           = &sync.Once{}
+	legacyTokenWarningWriter   io.Writer = os.Stderr
+)
 
 type APIError struct {
 	StatusCode int
@@ -36,6 +46,7 @@ type Client struct {
 	serpBaseURL        string
 	scraperBaseURL     string
 	webUnlockerBaseURL string
+	Scraper            *ScraperService
 	Airbnb             *AirbnbService
 	Amazon             *AmazonService
 	Bing               *BingService
@@ -87,8 +98,15 @@ func WithTimeout(timeout time.Duration) Option {
 }
 
 func NewClient(token string, opts ...Option) *Client {
+	resolvedToken := strings.TrimSpace(token)
+	if resolvedToken == "" {
+		resolvedToken = TokenFromEnv()
+	} else {
+		warnIfLegacyEnvironmentToken(resolvedToken)
+	}
+
 	c := &Client{
-		token:              strings.TrimSpace(token),
+		token:              resolvedToken,
 		httpClient:         &http.Client{Timeout: 120 * time.Second},
 		serpBaseURL:        defaultSERPBaseURL,
 		scraperBaseURL:     defaultScraperBaseURL,
@@ -99,6 +117,7 @@ func NewClient(token string, opts ...Option) *Client {
 			opt(c)
 		}
 	}
+	c.Scraper = &ScraperService{client: c}
 	c.Airbnb = &AirbnbService{client: c}
 	c.Amazon = &AmazonService{client: c}
 	c.Bing = &BingService{client: c}
@@ -122,6 +141,52 @@ func NewClient(token string, opts ...Option) *Client {
 	c.YouTube = &YouTubeService{client: c}
 	c.Zillow = &ZillowService{client: c}
 	return c
+}
+
+// TokenFromEnv returns the first configured Dataify credential from the standard
+// environment variable and its legacy compatibility aliases.
+func TokenFromEnv() string {
+	if token := environmentToken(standardTokenEnv); token != "" {
+		return token
+	}
+	if token := environmentToken(legacyTokenEnv); token != "" {
+		warnLegacyTokenEnvironment(legacyTokenEnv)
+		return token
+	}
+	if token := environmentToken(legacyAPIKeyEnv); token != "" {
+		warnLegacyTokenEnvironment(legacyAPIKeyEnv)
+		return token
+	}
+	return ""
+}
+
+func environmentToken(name string) string {
+	return strings.TrimSpace(os.Getenv(name))
+}
+
+func warnIfLegacyEnvironmentToken(token string) {
+	if token == environmentToken(legacyTokenEnv) && token != "" {
+		warnLegacyTokenEnvironment(legacyTokenEnv)
+		return
+	}
+	if token == environmentToken(legacyAPIKeyEnv) && token != "" {
+		warnLegacyTokenEnvironment(legacyAPIKeyEnv)
+	}
+}
+
+func warnLegacyTokenEnvironment(name string) {
+	var once *sync.Once
+	switch name {
+	case legacyTokenEnv:
+		once = legacyTokenEnvWarningOnce
+	case legacyAPIKeyEnv:
+		once = legacyAPIKeyEnvWarningOnce
+	default:
+		return
+	}
+	once.Do(func() {
+		fmt.Fprintf(legacyTokenWarningWriter, "dataify: %s 已兼容读取，建议迁移至 DATAIFY_API_TOKEN。\n", name)
+	})
 }
 
 func (c *Client) doForm(ctx context.Context, baseURL, path string, values map[string]string) (*RawResponse, error) {
