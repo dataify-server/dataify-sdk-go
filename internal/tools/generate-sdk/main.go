@@ -45,7 +45,7 @@ var initialisms = map[string]string{
 }
 
 var brandWords = map[string]string{
-	"youtube": "YouTube", "tiktok": "TikTok", "github": "GitHub", "linkedin": "LinkedIn", "ebay": "EBay", "duckduckgo": "DuckDuckGo",
+	"youtube": "YouTube", "tiktok": "TikTok", "github": "GitHub", "linkedin": "LinkedIn", "ebay": "EBay", "duckduckgo": "DuckDuckGo", "chatgpt": "ChatGPT",
 }
 
 var serpTools = map[string]string{

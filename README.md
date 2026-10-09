@@ -51,6 +51,6 @@ Detailed Chinese usage guide: [docs/USAGE.zh-CN.md](docs/USAGE.zh-CN.md).
 
 ## Tool Count
 
-71 API Key runtime tools are documented in docs/tools.md and docs/tools.yaml.
+72 API Key runtime tools are documented in docs/tools.md and docs/tools.yaml.
 Task status is a separate Scraper runtime method and is not included in that count.
 Task downloads are also separate Scraper runtime methods and are not included in that count.

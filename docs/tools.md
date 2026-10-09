@@ -224,6 +224,20 @@ This document is generated from the MCP tool source. Files are UTF-8.
 | `url` | `URL` | `string` | `true` | `https://www.booking.com/hotel/gb/westlands-of-pitlochry.en-gb.html#tab-main` | `` | `` |
 | `file_name` | `FileName` | `string` | `false` | `{{TasksID}}` | `` | `` |
 
+## `chatgpt_answer`
+
+- SDK: `ChatGPT.Answer(ctx, dataify.ChatGPTAnswerRequest{...})`
+- Service kind: `scraper_builder`
+- Spider name: `chatgpt.com`
+- Default spider ID: `chatgpt_answer_by-keywords`
+
+| Parameter | Go Field | Type | Required | Default | Min | Max |
+| --- | --- | --- | --- | --- | --- | --- |
+| `spider_id` | `SpiderID` | `string` | `true` | `chatgpt_answer_by-keywords` | `` | `` |
+| `search_terms` | `SearchTerms` | `string` | `false` | `pizza` | `` | `` |
+| `chatgpt_url` | `ChatGPTURL` | `string` | `false` | `https://chatgpt.com/?q=pizza` | `` | `` |
+| `file_name` | `FileName` | `string` | `false` | `{{TasksID}}` | `` | `` |
+
 ## `crunchbase_company`
 
 - SDK: `Crunchbase.Company(ctx, dataify.CrunchbaseCompanyRequest{...})`

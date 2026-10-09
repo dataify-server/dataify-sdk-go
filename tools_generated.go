@@ -13,6 +13,8 @@ type BingService struct{ client *Client }
 
 type BookingService struct{ client *Client }
 
+type ChatGPTService struct{ client *Client }
+
 type CrunchbaseService struct{ client *Client }
 
 type DuckDuckGoService struct{ client *Client }
@@ -638,6 +640,54 @@ func (s *BookingService) Hotellist(ctx context.Context, req BookingHotellistRequ
 	}
 	spiderID := "booking_hotellist_by-url"
 	spiderName := "booking.com"
+	fileName := values["file_name"]
+	if fileName == "" {
+		fileName = "{{TasksID}}"
+	}
+	delete(values, "spider_id")
+	delete(values, "file_name")
+	spiderParameters, err := json.Marshal([]map[string]string{values})
+	if err != nil {
+		return nil, err
+	}
+	payload := map[string]string{
+		"spider_name":       spiderName,
+		"spider_id":         spiderID,
+		"spider_parameters": string(spiderParameters),
+		"spider_errors":     "true",
+		"file_name":         fileName,
+	}
+	return s.client.doForm(ctx, s.client.scraperBaseURL, "/builder?platform=1", payload)
+}
+
+type ChatGPTAnswerRequest struct {
+	SpiderID    string `json:"spider_id,omitempty"`
+	SearchTerms string `json:"search_terms,omitempty"`
+	ChatGPTURL  string `json:"chatgpt_url,omitempty"`
+	FileName    string `json:"file_name,omitempty"`
+}
+
+func (r ChatGPTAnswerRequest) params() map[string]string {
+	values := map[string]string{}
+	addStringParam(values, "spider_id", r.SpiderID)
+	addStringParam(values, "search_terms", r.SearchTerms)
+	addStringParam(values, "chatgpt_url", r.ChatGPTURL)
+	addStringParam(values, "file_name", r.FileName)
+	return values
+}
+
+func (s *ChatGPTService) Answer(ctx context.Context, req ChatGPTAnswerRequest) (*RawResponse, error) {
+	values := req.params()
+	defaultParam(values, "spider_id", "chatgpt_answer_by-keywords")
+	defaultParam(values, "file_name", "{{TasksID}}")
+	if err := requireParam(values, "spider_id"); err != nil {
+		return nil, err
+	}
+	spiderID := values["spider_id"]
+	if spiderID == "" {
+		spiderID = "chatgpt_answer_by-keywords"
+	}
+	spiderName := "chatgpt.com"
 	fileName := values["file_name"]
 	if fileName == "" {
 		fileName = "{{TasksID}}"
@@ -3809,6 +3859,12 @@ var ToolSpecs = []ToolSpec{
 	}},
 	{Name: "booking_hotellist", Group: "Booking", Method: "Hotellist", ServiceKind: "scraper_builder", Engine: "", SpiderName: "booking.com", SpiderID: "booking_hotellist_by-url", Params: []ToolParamSpec{
 		{Name: "url", Type: "string", Required: true, Default: "https://www.booking.com/hotel/gb/westlands-of-pitlochry.en-gb.html#tab-main", Min: "", Max: ""},
+		{Name: "file_name", Type: "string", Required: false, Default: "{{TasksID}}", Min: "", Max: ""},
+	}},
+	{Name: "chatgpt_answer", Group: "ChatGPT", Method: "Answer", ServiceKind: "scraper_builder", Engine: "", SpiderName: "chatgpt.com", SpiderID: "chatgpt_answer_by-keywords", Params: []ToolParamSpec{
+		{Name: "spider_id", Type: "string", Required: true, Default: "chatgpt_answer_by-keywords", Min: "", Max: ""},
+		{Name: "search_terms", Type: "string", Required: false, Default: "pizza", Min: "", Max: ""},
+		{Name: "chatgpt_url", Type: "string", Required: false, Default: "https://chatgpt.com/?q=pizza", Min: "", Max: ""},
 		{Name: "file_name", Type: "string", Required: false, Default: "{{TasksID}}", Min: "", Max: ""},
 	}},
 	{Name: "crunchbase_company", Group: "Crunchbase", Method: "Company", ServiceKind: "scraper_builder", Engine: "", SpiderName: "crunchbase.com", SpiderID: "crunchbase_company_by-url", Params: []ToolParamSpec{

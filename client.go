@@ -51,6 +51,7 @@ type Client struct {
 	Amazon             *AmazonService
 	Bing               *BingService
 	Booking            *BookingService
+	ChatGPT            *ChatGPTService
 	Crunchbase         *CrunchbaseService
 	DuckDuckGo         *DuckDuckGoService
 	EBay               *EBayService
@@ -122,6 +123,7 @@ func NewClient(token string, opts ...Option) *Client {
 	c.Amazon = &AmazonService{client: c}
 	c.Bing = &BingService{client: c}
 	c.Booking = &BookingService{client: c}
+	c.ChatGPT = &ChatGPTService{client: c}
 	c.Crunchbase = &CrunchbaseService{client: c}
 	c.DuckDuckGo = &DuckDuckGoService{client: c}
 	c.EBay = &EBayService{client: c}

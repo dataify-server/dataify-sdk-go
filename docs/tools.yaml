@@ -542,6 +542,34 @@ tools:
         type: "string"
         required: false
         default: "{{TasksID}}"
+  - name: "chatgpt_answer"
+    group: "ChatGPT"
+    method: "Answer"
+    request_type: "ChatGPTAnswerRequest"
+    service_kind: "scraper_builder"
+    spider_name: "chatgpt.com"
+    spider_id: "chatgpt_answer_by-keywords"
+    params:
+      - name: "spider_id"
+        go_name: "SpiderID"
+        type: "string"
+        required: true
+        default: "chatgpt_answer_by-keywords"
+      - name: "search_terms"
+        go_name: "SearchTerms"
+        type: "string"
+        required: false
+        default: "pizza"
+      - name: "chatgpt_url"
+        go_name: "ChatGPTURL"
+        type: "string"
+        required: false
+        default: "https://chatgpt.com/?q=pizza"
+      - name: "file_name"
+        go_name: "FileName"
+        type: "string"
+        required: false
+        default: "{{TasksID}}"
   - name: "crunchbase_company"
     group: "Crunchbase"
     method: "Company"
