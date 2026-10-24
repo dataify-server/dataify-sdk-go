@@ -42,6 +42,28 @@ if err == nil {
 }
 ```
 
+## AI Web
+
+AI Web provides synchronous search, map, and extract calls. Search supports web
+(`AIWebUniqueIDWeb`), shopping, news, and scholar modes. The SDK defaults
+to `https://aiwebapi.dataify.com`; set `AI_WEB_API_BASE_URL` or pass
+`dataify.WithAIWebBaseURL` only when you need a test or custom gateway.
+
+```go
+client := dataify.NewClient(token)
+result, err := client.AIWeb.Search(ctx, dataify.AIWebSearchRequest{
+    UniqueID: dataify.AIWebUniqueIDWeb,
+    Query:    "OpenAI",
+    Source:   dataify.AIWebSourceWeb,
+})
+// result.RequestID comes from the X-Request-Id response header.
+fmt.Println(result.String())
+```
+
+See [docs/AI_WEB.md](docs/AI_WEB.md) for the full parameter and download
+reference. AI Web methods are separate from the generated runtime tools and are
+not included in the tool count.
+
 Set `DATAIFY_API_TOKEN` for new integrations. `DATAIFY_TOKEN` and
 `DATAIFY_API_KEY` remain supported as compatibility aliases.
 When a legacy variable supplies the credential, the SDK writes a one-time

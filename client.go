@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -19,13 +18,15 @@ const (
 	defaultSERPBaseURL        = "https://scraperapi.dataify.com"
 	defaultScraperBaseURL     = "https://scraperapi.dataify.com"
 	defaultWebUnlockerBaseURL = "https://webunlocker.dataify.com"
+	defaultAIWebBaseURL       = "https://aiwebapi.dataify.com"
+	aiWebBaseURLEnv           = "AI_WEB_API_BASE_URL"
 	standardTokenEnv          = "DATAIFY_API_TOKEN"
 	legacyTokenEnv            = "DATAIFY_TOKEN"
 	legacyAPIKeyEnv           = "DATAIFY_API_KEY"
 )
 
 var (
-	ErrMissingToken                      = errors.New("dataify: missing API token; set DATAIFY_API_TOKEN (legacy DATAIFY_TOKEN and DATAIFY_API_KEY are also supported)")
+	ErrMissingToken                      = newSDKError("dataify: missing API token; set DATAIFY_API_TOKEN (legacy DATAIFY_TOKEN and DATAIFY_API_KEY are also supported)")
 	legacyTokenEnvWarningOnce            = &sync.Once{}
 	legacyAPIKeyEnvWarningOnce           = &sync.Once{}
 	legacyTokenWarningWriter   io.Writer = os.Stderr
@@ -40,12 +41,16 @@ func (e *APIError) Error() string {
 	return fmt.Sprintf("dataify: api returned HTTP %d: %s", e.StatusCode, truncate(e.Body))
 }
 
+func (e *APIError) DataifyError() bool { return true }
+
 type Client struct {
 	token              string
 	httpClient         *http.Client
 	serpBaseURL        string
 	scraperBaseURL     string
 	webUnlockerBaseURL string
+	aiWebBaseURL       string
+	AIWeb              *AIWebService
 	Scraper            *ScraperService
 	Airbnb             *AirbnbService
 	Amazon             *AmazonService
@@ -90,6 +95,9 @@ func WithScraperBaseURL(baseURL string) Option {
 func WithWebUnlockerBaseURL(baseURL string) Option {
 	return func(c *Client) { c.webUnlockerBaseURL = strings.TrimRight(strings.TrimSpace(baseURL), "/") }
 }
+func WithAIWebBaseURL(baseURL string) Option {
+	return func(c *Client) { c.aiWebBaseURL = strings.TrimRight(strings.TrimSpace(baseURL), "/") }
+}
 func WithTimeout(timeout time.Duration) Option {
 	return func(c *Client) {
 		if timeout > 0 {
@@ -112,6 +120,7 @@ func NewClient(token string, opts ...Option) *Client {
 		serpBaseURL:        defaultSERPBaseURL,
 		scraperBaseURL:     defaultScraperBaseURL,
 		webUnlockerBaseURL: defaultWebUnlockerBaseURL,
+		aiWebBaseURL:       aiWebBaseURLFromEnvironment(),
 	}
 	for _, opt := range opts {
 		if opt != nil {
@@ -119,6 +128,7 @@ func NewClient(token string, opts ...Option) *Client {
 		}
 	}
 	c.Scraper = &ScraperService{client: c}
+	c.AIWeb = &AIWebService{client: c}
 	c.Airbnb = &AirbnbService{client: c}
 	c.Amazon = &AmazonService{client: c}
 	c.Bing = &BingService{client: c}
@@ -166,6 +176,15 @@ func environmentToken(name string) string {
 	return strings.TrimSpace(os.Getenv(name))
 }
 
+// aiWebBaseURLFromEnvironment returns AI_WEB_API_BASE_URL when set, otherwise
+// the production AI Web gateway.
+func aiWebBaseURLFromEnvironment() string {
+	if value := strings.TrimRight(environmentToken(aiWebBaseURLEnv), "/"); value != "" {
+		return value
+	}
+	return defaultAIWebBaseURL
+}
+
 func warnIfLegacyEnvironmentToken(token string) {
 	if token == environmentToken(legacyTokenEnv) && token != "" {
 		warnLegacyTokenEnvironment(legacyTokenEnv)
@@ -210,6 +229,31 @@ func (c *Client) doForm(ctx context.Context, baseURL, path string, values map[st
 	return c.do(req)
 }
 
+func (c *Client) doJSONRaw(ctx context.Context, baseURL, path string, body []byte) (http.Header, []byte, error) {
+	if c.token == "" {
+		return nil, nil, ErrMissingToken
+	}
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, strings.TrimRight(baseURL, "/")+path, bytes.NewReader(body))
+	if err != nil {
+		return nil, nil, err
+	}
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Accept", "application/json")
+	req.Header.Set("Authorization", bearer(c.token))
+	resp, err := c.httpClient.Do(req)
+	if err != nil {
+		return nil, nil, wrapNetworkError(err)
+	}
+	defer resp.Body.Close()
+	responseBody, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, nil, wrapNetworkError(err)
+	}
+	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
+		return nil, nil, &APIError{StatusCode: resp.StatusCode, Body: responseBody}
+	}
+	return resp.Header.Clone(), responseBody, nil
+}
 func (c *Client) doJSON(ctx context.Context, baseURL, path string, payload map[string]string) (*RawResponse, error) {
 	if c.token == "" {
 		return nil, ErrMissingToken
@@ -230,17 +274,21 @@ func (c *Client) doJSON(ctx context.Context, baseURL, path string, payload map[s
 func (c *Client) do(req *http.Request) (*RawResponse, error) {
 	resp, err := c.httpClient.Do(req)
 	if err != nil {
-		return nil, err
+		return nil, wrapNetworkError(err)
 	}
 	defer resp.Body.Close()
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return nil, err
+		return nil, wrapNetworkError(err)
 	}
 	if resp.StatusCode < 200 || resp.StatusCode >= 300 {
 		return nil, &APIError{StatusCode: resp.StatusCode, Body: body}
 	}
-	return NewRawResponse(body)
+	raw, err := NewRawResponse(body)
+	if err != nil {
+		return nil, fmt.Errorf("%w: %v", ErrInvalidResponse, err)
+	}
+	return raw, nil
 }
 
 func bearer(token string) string {

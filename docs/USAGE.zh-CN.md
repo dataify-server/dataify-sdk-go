@@ -11,6 +11,7 @@
 - SERP 搜索引擎接口，例如 Google、Bing、Yandex、DuckDuckGo 等。
 - Scraper Builder 抓取工具，例如 Amazon、YouTube、TikTok、LinkedIn、Walmart、Zillow 等平台。
 - Web Unlocker 通用网页解锁接口。
+- AI Web 同步搜索、站点发现与正文提取接口（`client.AIWeb`）。
 
 当前 SDK 只保留 API Key 鉴权相关的抓取类工具，不包含用户信息、余额、统计、任务查询等需要 dashboard JWT 的接口。
 
@@ -139,10 +140,11 @@ client := dataify.NewClient(
 	dataify.WithSERPBaseURL("https://scraperapi.dataify.com"),
 	dataify.WithScraperBaseURL("https://scraperapi.dataify.com"),
 	dataify.WithWebUnlockerBaseURL("https://webunlocker.dataify.com"),
+	dataify.WithAIWebBaseURL("https://aiwebapi.dataify.com"), // 测试/私有网关时替换该地址
 )
 ```
 
-一般用户不需要修改 Base URL。
+一般用户不需要修改 Base URL。AI Web 默认使用正式网关 `https://aiwebapi.dataify.com`；测试/私有网关可通过 `AI_WEB_API_BASE_URL` 或 `WithAIWebBaseURL` 覆盖。只有显式传入空 `WithAIWebBaseURL("")` 时才会返回 `dataify.ErrMissingAIWebBaseURL`。
 
 ## 6. 返回值处理
 
@@ -151,6 +153,8 @@ client := dataify.NewClient(
 ```go
 (*dataify.RawResponse, error)
 ```
+
+AI Web 的 `Search`、`Map`、`Extract`、`Execute`、`ExecuteRaw`、`DownloadResult` 统一返回 `(*dataify.AIWebResult, error)`，其中 `RequestID` 来自响应头 `X-Request-Id`；`DownloadResult` 的 `RequestID` 为调用方传入的 request_id，`Outputs` 为下载到的原始 JSON，不重新归一化为数组。
 
 `RawResponse` 常用方法：
 
@@ -334,7 +338,80 @@ resp, err := client.WebUnlocker.Request(ctx, dataify.RequestWebUnlockerRequest{
 })
 ```
 
-## 12. 错误处理
+## 12. AI Web 示例
+
+AI Web 提供同步的搜索、站点发现和正文提取能力，入口包括：
+
+- `client.AIWeb.Search`
+- `client.AIWeb.Map`
+- `client.AIWeb.Extract`
+- `client.AIWeb.Execute` / `client.AIWeb.ExecuteRaw`
+- `client.AIWeb.DownloadResult`
+
+AI Web 默认使用正式网关 `https://aiwebapi.dataify.com`。测试/私有网关可通过环境变量 `AI_WEB_API_BASE_URL` 或 `dataify.WithAIWebBaseURL(...)` 覆盖；只有显式传入空 `WithAIWebBaseURL("")` 时才会返回 `dataify.ErrMissingAIWebBaseURL`。
+
+```go
+client := dataify.NewClient(dataify.TokenFromEnv())
+
+result, err := client.AIWeb.Search(ctx, dataify.AIWebSearchRequest{
+    UniqueID:   dataify.AIWebUniqueIDNews,
+    Query:      "OpenAI",
+    MaxResults: dataify.IntPtr(3),
+    Source:     dataify.AIWebSourceNews,
+})
+if err != nil {
+    log.Fatal(err)
+}
+fmt.Println(result.RequestID) // 来自响应头 X-Request-Id
+fmt.Println(result.String())
+```
+
+网页搜索示例（`unique_id=search_web`、`source=web`，支持 `time_range` 和 `country`）：
+
+```go
+webResult, err := client.AIWeb.Search(ctx, dataify.AIWebSearchRequest{
+    UniqueID:   dataify.AIWebUniqueIDWeb,
+    Query:      "OpenAI",
+    MaxResults: dataify.IntPtr(3),
+    Country:    "US",
+    TimeRange:  "week",
+})
+```
+`Search`、`Map`、`Extract`、`Execute` 会把 `outputs` 统一成数组：`null` 变为 `[]`，数组保持不变，单个对象会包装成单元素数组。需要保留上游原始结构时使用 `ExecuteRaw`。
+
+AI Web 在发送请求前会做本地校验：`max_results` / `limit` 范围、`time_range` / `domain_filter` / `sitemap` 枚举、`formats` 取值与去重、`country` 两位国家码、URL 完整性以及 `headers` 禁止项等。未通过校验会返回 `*dataify.ValidationError`，其中 `Parameter` 是出错的字段名。
+
+所有 SDK 错误都实现 `dataify.DataifyError`；HTTP 错误是 `*dataify.APIError`，传输错误是 `*dataify.NetworkError`，可用 `errors.Is` 匹配 `dataify.ErrNetwork`、`dataify.ErrTimeout`、`dataify.ErrCanceled`。
+
+> 测试环境当前对 `sitemap=only` 返回 500；在上游修复前请使用 `dataify.AIWebSitemapInclude`。
+
+结果下载返回 `*dataify.AIWebResult`，`RequestID` 为传入的 request_id，`Outputs` 保持原始下载 JSON 结构。
+
+正文提取示例：
+
+```go
+result, err := client.AIWeb.Extract(ctx, dataify.AIWebExtractRequest{
+    UniqueID:        dataify.AIWebUniqueIDExtract,
+    URL:             "https://example.com/article",
+    Formats:         []string{dataify.AIWebFormatMarkdown},
+    OnlyMainContent: dataify.BoolPtr(true),
+    AdvancedMode:    dataify.BoolPtr(true),
+})
+```
+
+结果下载使用上一次调用返回的 `RequestID`：
+
+```go
+downloaded, err := client.AIWeb.DownloadResult(ctx, result.RequestID)
+if err == nil {
+    fmt.Println(downloaded.RequestID)
+    fmt.Println(downloaded.String())
+}
+```
+
+可直接使用的固定 `UniqueID` 常量：`AIWebUniqueIDWeb`、`AIWebUniqueIDShopping`、`AIWebUniqueIDNews`、`AIWebUniqueIDScholar`、`AIWebUniqueIDMap`、`AIWebUniqueIDExtract`。完整参数说明见 [AI_WEB.md](AI_WEB.md)。
+
+## 13. 错误处理
 
 缺少 API Key：
 
@@ -375,7 +452,7 @@ if err != nil {
 fmt.Println(resp.String())
 ```
 
-## 13. 如何查找工具和参数
+## 14. 如何查找工具和参数
 
 SDK 里的工具按平台分组，例如：
 
@@ -402,7 +479,7 @@ docs/tools.yaml
 
 如果你使用 IDE，例如 GoLand 或 VS Code，可以输入 `client.` 查看所有服务分组，再输入服务名查看可用方法。
 
-## 14. 在其他项目中使用
+## 15. 在其他项目中使用
 
 在任意 Go 项目中：
 
@@ -425,7 +502,7 @@ client := dataify.NewClient(dataify.TokenFromEnv())
 
 不要使用本地 `replace`，否则就不是在测试别人从 GitHub 拉取 SDK 的真实场景。
 
-## 15. 发布后拉取测试
+## 16. 发布后拉取测试
 
 新建一个空目录：
 
@@ -450,7 +527,7 @@ go run .
 
 如果可以正常编译并调用，说明其他项目可以正常使用这个 SDK。
 
-## 16. 常见问题
+## 17. 常见问题
 
 ### 14.1 `missing API token`
 
@@ -509,7 +586,7 @@ go get github.com/dataify-server/dataify-sdk-go@v0.1.1
 - API Key 是否有效。
 - 当前账户是否有对应工具额度。
 
-## 17. 安全建议
+## 18. 安全建议
 
 - 不要把 API Key 写死在 `.go` 文件里。
 - 不要提交 `.env` 文件。

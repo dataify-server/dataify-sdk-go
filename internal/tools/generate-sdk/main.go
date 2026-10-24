@@ -115,6 +115,10 @@ func loadTools(root string) ([]Tool, error) {
 		if strings.HasPrefix(name, "query_") {
 			return nil
 		}
+		// Dashboard/JWT-only tools are intentionally excluded from the API Key SDK.
+		if strings.HasPrefix(name, "scraper_") || name == "web_unlock_statistics" || name == "web_unlock_task" {
+			return nil
+		}
 		constants := parseConstants(text)
 		params := parseParams(text, constants)
 		tool := Tool{
@@ -378,7 +382,6 @@ import (
     "bytes"
     "context"
     "encoding/json"
-    "errors"
     "fmt"
     "io"
     "net/http"
@@ -393,13 +396,15 @@ const (
     defaultSERPBaseURL = "https://scraperapi.dataify.com"
     defaultScraperBaseURL = "https://scraperapi.dataify.com"
     defaultWebUnlockerBaseURL = "https://webunlocker.dataify.com"
+    defaultAIWebBaseURL = "https://aiwebapi.dataify.com"
+    aiWebBaseURLEnv          = "AI_WEB_API_BASE_URL"
     standardTokenEnv = "DATAIFY_API_TOKEN"
     legacyTokenEnv = "DATAIFY_TOKEN"
     legacyAPIKeyEnv = "DATAIFY_API_KEY"
 )
 
 var (
-    ErrMissingToken = errors.New("dataify: missing API token; set DATAIFY_API_TOKEN (legacy DATAIFY_TOKEN and DATAIFY_API_KEY are also supported)")
+    ErrMissingToken = newSDKError("dataify: missing API token; set DATAIFY_API_TOKEN (legacy DATAIFY_TOKEN and DATAIFY_API_KEY are also supported)")
     legacyTokenEnvWarningOnce = &sync.Once{}
     legacyAPIKeyEnvWarningOnce = &sync.Once{}
     legacyTokenWarningWriter io.Writer = os.Stderr
@@ -414,12 +419,16 @@ func (e *APIError) Error() string {
     return fmt.Sprintf("dataify: api returned HTTP %d: %s", e.StatusCode, truncate(e.Body))
 }
 
+func (e *APIError) DataifyError() bool { return true }
+
 type Client struct {
     token string
     httpClient *http.Client
     serpBaseURL string
     scraperBaseURL string
     webUnlockerBaseURL string
+    aiWebBaseURL string
+    AIWeb *AIWebService
     Scraper *ScraperService
 `)
 	for _, g := range groups {
@@ -433,6 +442,7 @@ func WithHTTPClient(httpClient *http.Client) Option { return func(c *Client) { i
 func WithSERPBaseURL(baseURL string) Option { return func(c *Client) { c.serpBaseURL = strings.TrimRight(strings.TrimSpace(baseURL), "/") } }
 func WithScraperBaseURL(baseURL string) Option { return func(c *Client) { c.scraperBaseURL = strings.TrimRight(strings.TrimSpace(baseURL), "/") } }
 func WithWebUnlockerBaseURL(baseURL string) Option { return func(c *Client) { c.webUnlockerBaseURL = strings.TrimRight(strings.TrimSpace(baseURL), "/") } }
+func WithAIWebBaseURL(baseURL string) Option { return func(c *Client) { c.aiWebBaseURL = strings.TrimRight(strings.TrimSpace(baseURL), "/") } }
 func WithTimeout(timeout time.Duration) Option { return func(c *Client) { if timeout > 0 { c.httpClient.Timeout = timeout } } }
 
 func NewClient(token string, opts ...Option) *Client {
@@ -449,9 +459,11 @@ func NewClient(token string, opts ...Option) *Client {
         serpBaseURL: defaultSERPBaseURL,
         scraperBaseURL: defaultScraperBaseURL,
         webUnlockerBaseURL: defaultWebUnlockerBaseURL,
+        aiWebBaseURL: aiWebBaseURLFromEnvironment(),
     }
     for _, opt := range opts { if opt != nil { opt(c) } }
 	c.Scraper = &ScraperService{client: c}
+	c.AIWeb = &AIWebService{client: c}
 `)
 	for _, g := range groups {
 		fmt.Fprintf(&b, "    c.%s = &%sService{client: c}\n", g, g)
@@ -478,6 +490,15 @@ func TokenFromEnv() string {
 
 func environmentToken(name string) string {
     return strings.TrimSpace(os.Getenv(name))
+}
+
+// aiWebBaseURLFromEnvironment returns AI_WEB_API_BASE_URL when set, otherwise
+// the production AI Web gateway.
+func aiWebBaseURLFromEnvironment() string {
+    if value := strings.TrimRight(environmentToken(aiWebBaseURLEnv), "/"); value != "" {
+        return value
+    }
+    return defaultAIWebBaseURL
 }
 
 func warnIfLegacyEnvironmentToken(token string) {
@@ -518,6 +539,21 @@ func (c *Client) doForm(ctx context.Context, baseURL, path string, values map[st
     return c.do(req)
 }
 
+func (c *Client) doJSONRaw(ctx context.Context, baseURL, path string, body []byte) (http.Header, []byte, error) {
+    if c.token == "" { return nil, nil, ErrMissingToken }
+    req, err := http.NewRequestWithContext(ctx, http.MethodPost, strings.TrimRight(baseURL, "/")+path, bytes.NewReader(body))
+    if err != nil { return nil, nil, err }
+    req.Header.Set("Content-Type", "application/json")
+    req.Header.Set("Accept", "application/json")
+    req.Header.Set("Authorization", bearer(c.token))
+    resp, err := c.httpClient.Do(req)
+    if err != nil { return nil, nil, wrapNetworkError(err) }
+    defer resp.Body.Close()
+    responseBody, err := io.ReadAll(resp.Body)
+    if err != nil { return nil, nil, wrapNetworkError(err) }
+    if resp.StatusCode < 200 || resp.StatusCode >= 300 { return nil, nil, &APIError{StatusCode: resp.StatusCode, Body: responseBody} }
+    return resp.Header.Clone(), responseBody, nil
+}
 func (c *Client) doJSON(ctx context.Context, baseURL, path string, payload map[string]string) (*RawResponse, error) {
     if c.token == "" { return nil, ErrMissingToken }
     body, err := json.Marshal(payload)
@@ -531,12 +567,14 @@ func (c *Client) doJSON(ctx context.Context, baseURL, path string, payload map[s
 
 func (c *Client) do(req *http.Request) (*RawResponse, error) {
     resp, err := c.httpClient.Do(req)
-    if err != nil { return nil, err }
+    if err != nil { return nil, wrapNetworkError(err) }
     defer resp.Body.Close()
     body, err := io.ReadAll(resp.Body)
-    if err != nil { return nil, err }
+    if err != nil { return nil, wrapNetworkError(err) }
     if resp.StatusCode < 200 || resp.StatusCode >= 300 { return nil, &APIError{StatusCode: resp.StatusCode, Body: body} }
-    return NewRawResponse(body)
+    raw, err := NewRawResponse(body)
+    if err != nil { return nil, fmt.Errorf("%w: %v", ErrInvalidResponse, err) }
+    return raw, nil
 }
 
 func bearer(token string) string {
@@ -786,6 +824,28 @@ if err == nil {
     // Stream or save the CSV/XLSX body.
 }
 `+"```"+`
+
+## AI Web
+
+AI Web provides synchronous search, map, and extract calls. Search supports web
+(`+"`AIWebUniqueIDWeb`"+`), shopping, news, and scholar modes. The SDK defaults
+to `+"`https://aiwebapi.dataify.com`"+`; set `+"`AI_WEB_API_BASE_URL`"+` or pass
+`+"`dataify.WithAIWebBaseURL`"+` only when you need a test or custom gateway.
+
+`+"```go"+`
+client := dataify.NewClient(token)
+result, err := client.AIWeb.Search(ctx, dataify.AIWebSearchRequest{
+    UniqueID: dataify.AIWebUniqueIDWeb,
+    Query:    "OpenAI",
+    Source:   dataify.AIWebSourceWeb,
+})
+// result.RequestID comes from the X-Request-Id response header.
+fmt.Println(result.String())
+`+"```"+`
+
+See [docs/AI_WEB.md](docs/AI_WEB.md) for the full parameter and download
+reference. AI Web methods are separate from the generated runtime tools and are
+not included in the tool count.
 
 Set `+"`DATAIFY_API_TOKEN`"+` for new integrations. `+"`DATAIFY_TOKEN`"+` and
 `+"`DATAIFY_API_KEY`"+` remain supported as compatibility aliases.

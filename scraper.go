@@ -2,7 +2,7 @@ package dataify
 
 import (
 	"context"
-	"errors"
+	"fmt"
 	"io"
 	"net/http"
 	"net/url"
@@ -25,7 +25,7 @@ const (
 	ScraperDownloadXLSX ScraperDownloadType = "xlsx"
 )
 
-var ErrUnsupportedDownloadType = errors.New("dataify: unsupported scraper download type")
+var ErrUnsupportedDownloadType = newSDKError("dataify: unsupported scraper download type")
 
 type TaskStatusResponse struct {
 	Data TaskStatusData `json:"data"`
@@ -83,9 +83,13 @@ func (s *ScraperService) DownloadTaskResult(ctx context.Context, taskID string) 
 
 	body, err := io.ReadAll(response.Body)
 	if err != nil {
-		return nil, err
+		return nil, wrapNetworkError(err)
 	}
-	return NewRawResponse(body)
+	raw, err := NewRawResponse(body)
+	if err != nil {
+		return nil, fmt.Errorf("%w: %v", ErrInvalidResponse, err)
+	}
+	return raw, nil
 }
 
 // DownloadTaskFile downloads a task result in JSON, CSV, or XLSX format. The
@@ -114,7 +118,7 @@ func (s *ScraperService) DownloadTaskFile(ctx context.Context, taskID string, fo
 
 	response, err := s.client.httpClient.Do(req)
 	if err != nil {
-		return nil, err
+		return nil, wrapNetworkError(err)
 	}
 	if response.StatusCode >= http.StatusOK && response.StatusCode < http.StatusMultipleChoices {
 		return response, nil
@@ -123,7 +127,7 @@ func (s *ScraperService) DownloadTaskFile(ctx context.Context, taskID string, fo
 	body, readErr := io.ReadAll(response.Body)
 	response.Body.Close()
 	if readErr != nil {
-		return nil, readErr
+		return nil, wrapNetworkError(readErr)
 	}
 	return nil, &APIError{StatusCode: response.StatusCode, Body: body}
 }

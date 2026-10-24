@@ -28,3 +28,11 @@ live*.json
 # Internal comparison artifacts
 docs/ts-go-diff.*
 internal/tools/compare-ts-go.cjs
+
+# Local packaging artifacts
+artifacts/
+*.zip
+
+# IDE settings
+.idea/
+.vscode/
