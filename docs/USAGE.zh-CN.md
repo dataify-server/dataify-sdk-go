@@ -383,8 +383,6 @@ AI Web 在发送请求前会做本地校验：`max_results` / `limit` 范围、`
 
 所有 SDK 错误都实现 `dataify.DataifyError`；HTTP 错误是 `*dataify.APIError`，传输错误是 `*dataify.NetworkError`，可用 `errors.Is` 匹配 `dataify.ErrNetwork`、`dataify.ErrTimeout`、`dataify.ErrCanceled`。
 
-> 测试环境当前对 `sitemap=only` 返回 500；在上游修复前请使用 `dataify.AIWebSitemapInclude`。
-
 结果下载返回 `*dataify.AIWebResult`，`RequestID` 为传入的 request_id，`Outputs` 保持原始下载 JSON 结构。
 
 正文提取示例：

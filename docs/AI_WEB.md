@@ -68,10 +68,6 @@ return `*dataify.ValidationError` with `Parameter` set to the JSON field name.
 For the built-in search tools, `source` is derived from `unique_id` when it is
 omitted and must match when it is set.
 
-> The test gateway currently returns HTTP 500 for `sitemap: "only"`
-> (`dataify.AIWebSitemapOnly`). The value remains part of the documented API
-> contract; use `AIWebSitemapInclude` until the upstream issue is fixed.
-
 ## Common parameters
 
 ### Search
